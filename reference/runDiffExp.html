@@ -45,6 +45,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -171,21 +173,21 @@
                                     samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, 
                                     output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='listcreateRmd.html'>listcreateRmd</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "baySeq.createRmd"            "DESeq2.createRmd"           
-#&gt;  [3] "DESeq2.length.createRmd"     "DSS.createRmd"              
-#&gt;  [5] "EBSeq.createRmd"             "edgeR.exact.createRmd"      
-#&gt;  [7] "edgeR.GLM.createRmd"         "lengthNorm.limma.createRmd" 
-#&gt;  [9] "logcpm.limma.createRmd"      "NBPSeq.createRmd"           
-#&gt; [11] "NOISeq.prenorm.createRmd"    "phylolm.createRmd"          
-#&gt; [13] "sqrtcpm.limma.createRmd"     "TCC.createRmd"              
-#&gt; [15] "ttest.createRmd"             "voom.length.limma.createRmd"
-#&gt; [17] "voom.limma.createRmd"        "voom.ttest.createRmd"       
-#&gt; [19] "vst.length.limma.createRmd" </div><div class='input'><span class='fu'>runDiffExp</span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"voom.limma"</span>, 
+</div><div class='output co'>#&gt;  [1] "baySeq.createRmd"                "DESeq2.createRmd"               
+#&gt;  [3] "DESeq2.length.createRmd"         "DSS.createRmd"                  
+#&gt;  [5] "EBSeq.createRmd"                 "edgeR.exact.createRmd"          
+#&gt;  [7] "edgeR.GLM.createRmd"             "lengthNorm.limma.createRmd"     
+#&gt;  [9] "lengthNorm.phylolimma.createRmd" "logcpm.limma.createRmd"         
+#&gt; [11] "NBPSeq.createRmd"                "NOISeq.prenorm.createRmd"       
+#&gt; [13] "phylolm.createRmd"               "sqrtcpm.limma.createRmd"        
+#&gt; [15] "TCC.createRmd"                   "ttest.createRmd"                
+#&gt; [17] "voom.limma.createRmd"            "voom.ttest.createRmd"           
+#&gt; [19] "vst.length.limma.createRmd"     </div><div class='input'><span class='fu'>runDiffExp</span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"voom.limma"</span>, 
            Rmdfunction <span class='op'>=</span> <span class='st'>"voom.limma.createRmd"</span>, 
            output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpVBw8Ql/tempcode152411e44a35.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
+#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpC6PPnB/tempcodea16e907f1f2.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
 #&gt;   ordinary text without R code
 #&gt; 
 #&gt;   |                                                                              |......................................................................| 100%
@@ -198,7 +200,7 @@
 #&gt;  $ error  : logi TRUE
 #&gt;  $ warning: logi TRUE
 #&gt; 
-#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpVBw8Ql/tempcode152411e44a35.md</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpC6PPnB/tempcodea16e907f1f2.md</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>## The following list covers the currently available </span>
 <span class='co'>## differential expression methods:</span>

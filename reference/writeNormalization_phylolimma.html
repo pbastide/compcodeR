@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List available *.createRmd functions — listcreateRmd • phylocompcodeR</title>
+<title>Generate a .Rmd file containing code to normalize data. — writeNormalization_phylolimma • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="List available *.createRmd functions — listcreateRmd" />
-<meta property="og:description" content="Print a list of all *.createRmd functions that are available in the search path. These functions can be used together with the runDiffExp function to perform differential expression analysis. Consult the help pages for the respective functions for more information." />
+<meta property="og:title" content="Generate a .Rmd file containing code to normalize data. — writeNormalization_phylolimma" />
+<meta property="og:description" content="This function uses lengthNormalizeRNASeq." />
 
 
 
@@ -116,35 +116,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List available *.createRmd functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExp.R'><code>R/generateRmdCodeDiffExp.R</code></a></small>
-    <div class="hidden name"><code>listcreateRmd.Rd</code></div>
+    <h1>Generate a <code>.Rmd</code> file containing code to normalize data.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/phylolmMethods.R'><code>R/phylolmMethods.R</code></a></small>
+    <div class="hidden name"><code>writeNormalization_phylolimma.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Print a list of all <code>*.createRmd</code> functions that are available in the search path. These functions can be used together with the <code><a href='runDiffExp.html'>runDiffExp</a></code> function to perform differential expression analysis. Consult the help pages for the respective functions for more information.</p>
+    <p>This function uses <code>lengthNormalizeRNASeq</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>writeNormalization_phylolimma</span><span class='op'>(</span>
+  <span class='va'>norm.method</span>,
+  <span class='va'>lengthNormalization</span>,
+  <span class='va'>dataTransformation</span>,
+  <span class='va'>codefile</span>
+<span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>norm.method</th>
+      <td><p>The between-sample normalization method used to compensate for varying library sizes and composition in the differential expression analysis. The normalization factors are calculated using the <code>calcNormFactors</code> of the <code>edgeR</code> package. Possible values are <code>"TMM"</code>, <code>"RLE"</code>, <code>"upperquartile"</code> and <code>"none"</code></p></td>
+    </tr>
+    <tr>
+      <th>lengthNormalization</th>
+      <td><p>one of "none" (no correction), "TPM", or "RPKM" (default). See details.</p></td>
+    </tr>
+    <tr>
+      <th>dataTransformation</th>
+      <td><p>one of "log2", "asin(sqrt)" or "sqrt." Data transformation to apply to the normalized data.</p></td>
+    </tr>
+    <tr>
+      <th>codefile</th>
+      <td></td>
+    </tr>
+    </table>
 
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Charlotte Soneson</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "baySeq.createRmd"                "DESeq2.createRmd"               
-#&gt;  [3] "DESeq2.length.createRmd"         "DSS.createRmd"                  
-#&gt;  [5] "EBSeq.createRmd"                 "edgeR.exact.createRmd"          
-#&gt;  [7] "edgeR.GLM.createRmd"             "lengthNorm.limma.createRmd"     
-#&gt;  [9] "lengthNorm.phylolimma.createRmd" "logcpm.limma.createRmd"         
-#&gt; [11] "NBPSeq.createRmd"                "NOISeq.prenorm.createRmd"       
-#&gt; [13] "phylolm.createRmd"               "sqrtcpm.limma.createRmd"        
-#&gt; [15] "TCC.createRmd"                   "ttest.createRmd"                
-#&gt; [17] "voom.limma.createRmd"            "voom.ttest.createRmd"           
-#&gt; [19] "vst.length.limma.createRmd"     </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

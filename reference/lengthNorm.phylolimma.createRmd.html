@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generate a .Rmd file containing code to perform differential expression analysis with DSS — DSS.createRmd • phylocompcodeR</title>
+<title>Generate a .Rmd file containing code to perform differential expression analysis with sqrtTPM+limma — lengthNorm.phylolimma.createRmd • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Generate a .Rmd file containing code to perform differential expression analysis with DSS — DSS.createRmd" />
-<meta property="og:description" content="A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) using the DSS package. The code is written to a .Rmd file. This function is generally not called by the user, the main interface for performing differential expression analysis is the runDiffExp function." />
+<meta property="og:title" content="Generate a .Rmd file containing code to perform differential expression analysis with sqrtTPM+limma — lengthNorm.phylolimma.createRmd" />
+<meta property="og:description" content="A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying the sqrt(TPM) transformation followed by differential expression analysis with limma. The code is written to a .Rmd file. This function is generally not called by the user, the main interface for performing differential expression analysis is the runDiffExp function." />
 
 
 
@@ -116,16 +116,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generate a <code>.Rmd</code> file containing code to perform differential expression analysis with DSS</h1>
+    <h1>Generate a <code>.Rmd</code> file containing code to perform differential expression analysis with sqrtTPM+limma</h1>
     <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExp.R'><code>R/generateRmdCodeDiffExp.R</code></a></small>
-    <div class="hidden name"><code>DSS.createRmd.Rd</code></div>
+    <div class="hidden name"><code>lengthNorm.phylolimma.createRmd.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) using the DSS package. The code is written to a <code>.Rmd</code> file. This function is generally not called by the user, the main interface for performing differential expression analysis is the <code><a href='runDiffExp.html'>runDiffExp</a></code> function.</p>
+    <p>A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying the sqrt(TPM) transformation followed by differential expression analysis with limma. The code is written to a <code>.Rmd</code> file. This function is generally not called by the user, the main interface for performing differential expression analysis is the <code><a href='runDiffExp.html'>runDiffExp</a></code> function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>DSS.createRmd</span><span class='op'>(</span><span class='va'>data.path</span>, <span class='va'>result.path</span>, <span class='va'>codefile</span>, <span class='va'>norm.method</span>, <span class='va'>disp.trend</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>lengthNorm.phylolimma.createRmd</span><span class='op'>(</span>
+  <span class='va'>data.path</span>,
+  <span class='va'>result.path</span>,
+  <span class='va'>codefile</span>,
+  <span class='va'>norm.method</span>,
+  model <span class='op'>=</span> <span class='st'>"BM"</span>,
+  measurement_error <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  extraDesignFactors <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lengthNormalization <span class='op'>=</span> <span class='st'>"RPKM"</span>,
+  dataTransformation <span class='op'>=</span> <span class='st'>"log2"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,52 +155,68 @@
     </tr>
     <tr>
       <th>norm.method</th>
-      <td><p>The between-sample normalization method used to compensate for varying library sizes and composition in the differential expression analysis. Possible values are <code>"quantile"</code>, <code>"total"</code> and <code>"median"</code>.</p></td>
+      <td><p>The between-sample normalization method used to compensate for varying library sizes and composition in the differential expression analysis. The normalization factors are calculated using the <code>calcNormFactors</code> of the <code>edgeR</code> package. Possible values are <code>"TMM"</code>, <code>"RLE"</code>, <code>"upperquartile"</code> and <code>"none"</code></p></td>
     </tr>
     <tr>
-      <th>disp.trend</th>
-      <td><p>A logical parameter indicating whether or not to include a trend in the dispersion estimation.</p></td>
+      <th>model</th>
+      <td><p>The model for trait evolution on the tree. Default to "BM".</p></td>
+    </tr>
+    <tr>
+      <th>measurement_error</th>
+      <td><p>A logical value indicating whether there is measurement error. Default to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>extraDesignFactors</th>
+      <td><p>A vector containing the extra factors to be passed to the design matrix of <code>limma</code>. All the factors need to be a <code>sample.annotations</code> from the <code><a href='compData.html'>compData</a></code> object. It should not contain the "condition" factor column, that will be added automatically.</p></td>
+    </tr>
+    <tr>
+      <th>lengthNormalization</th>
+      <td><p>one of "none" (no correction), "TPM", "RPKM" (default) or "gwRPKM". See details.</p></td>
+    </tr>
+    <tr>
+      <th>dataTransformation</th>
+      <td><p>one of "log2", "asin(sqrt)" or "sqrt". Data transformation to apply to the normalized data.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments to be passed to function <code>phylolimma</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The function generates a <code>.Rmd</code> file containing the code for performing the differential expression analysis. This file can be executed using e.g. the <code>knitr</code> package.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For more information about the methods and the interpretation of the parameters, see the <code>DSS</code> package and the corresponding publications.</p>
+    <p>For more information about the methods and the interpretation of the parameters, see the <code>limma</code> package and the corresponding publications.</p>
+
+<p>The <code>length.matrix</code> field of the <code>compData</code> object 
+is used to normalize the counts, by computing the square root of the TPM.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Wu H, Wang C and Wu Z (2013): A new shrinkage estimator for dispersion improves differential expression detection in RNA-seq data. Biostatistics 14(2), 232-243</p>
+    <p>Smyth GK (2005): Limma: linear models for microarray data. In: 'Bioinformatics and Computational Biology Solutions using R and Bioconductor'. R. Gentleman, V. Carey, S. Dudoit, R. Irizarry, W. Huber (eds), Springer, New York, pages 397-420</p>
+<p>Musser, JM, Wagner, GP. (2015): Character trees from transcriptome data: Origin and individuation of morphological characters and the so‐called “species signal”. J. Exp. Zool. (Mol. Dev. Evol.) 324B: 588– 604.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'>DSS</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://bioinf.wehi.edu.au/limma'>limma</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
 <span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, 
                                     samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, 
+                                    id.species <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>,
+                                    lengths.relmeans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1000</span><span class='op'>)</span>,
+                                    lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
                                     output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"DSS"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"DSS.createRmd"</span>, 
-           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"quantile"</span>, 
-           disp.trend <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"length.limma"</span>, 
+           Rmdfunction <span class='op'>=</span> <span class='st'>"length.limma.createRmd"</span>, 
+           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: DSS</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocParallel</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: bsseq</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpC6PPnB/tempcodea16e386dd356.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
-#&gt;   ordinary text without R code
-#&gt; 
-#&gt;   |                                                                              |......................................................................| 100%
-#&gt; label: unnamed-chunk-1 (with options) 
-#&gt; List of 6
-#&gt;  $ echo   : logi TRUE
-#&gt;  $ eval   : logi TRUE
-#&gt;  $ include: logi TRUE
-#&gt;  $ message: logi FALSE
-#&gt;  $ error  : logi TRUE
-#&gt;  $ warning: logi TRUE
-#&gt; 
-#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpC6PPnB/tempcodea16e386dd356.md</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
+</div><div class='output co'>#&gt; Error in eval(parse(text = Rmdfunction)) : 
+#&gt;   object 'length.limma.createRmd' not found</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
