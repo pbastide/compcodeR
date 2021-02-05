@@ -76,7 +76,7 @@
       <h1 data-toc-skip>Comparing methods for differential expression analysis of RNAseq data with the compcodeR package</h1>
                         <h4 class="author">Charlotte Soneson</h4>
             
-            <h4 class="date">2021-01-29</h4>
+            <h4 class="date">2021-02-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/compcodeR/blob/master/vignettes/compcodeR.Rmd"><code>vignettes/compcodeR.Rmd</code></a></small>
       <div class="hidden name"><code>compcodeR.Rmd</code></div>
@@ -510,7 +510,7 @@ Screenshot of the graphical user interface used to select data set (left) and se
 <a href="#session-info" class="anchor"></a>Session info</h1>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R Under development (unstable) (2021-01-28 r79896)</span>
+<span class="co">#&gt; R Under development (unstable) (2021-02-03 r79933)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
 <span class="co">#&gt; </span>
@@ -542,29 +542,30 @@ Screenshot of the graphical user interface used to select data set (left) and se
 <span class="co">#&gt; [21] textshaping_0.2.1   desc_1.2.0         </span>
 <span class="co">#&gt; [23] stringr_1.4.0       munsell_0.5.0      </span>
 <span class="co">#&gt; [25] compiler_4.1.0      xfun_0.20          </span>
-<span class="co">#&gt; [27] pkgconfig_2.0.3     systemfonts_0.3.2  </span>
+<span class="co">#&gt; [27] pkgconfig_2.0.3     systemfonts_1.0.0  </span>
 <span class="co">#&gt; [29] stable_1.1.4        htmltools_0.5.1.1  </span>
 <span class="co">#&gt; [31] tcltk_4.1.0         tidyselect_1.1.0   </span>
-<span class="co">#&gt; [33] tibble_3.0.5        bookdown_0.21      </span>
+<span class="co">#&gt; [33] tibble_3.0.6        bookdown_0.21      </span>
 <span class="co">#&gt; [35] edgeR_3.33.1        stabledist_0.7-1   </span>
-<span class="co">#&gt; [37] crayon_1.3.4        dplyr_1.0.3        </span>
+<span class="co">#&gt; [37] crayon_1.4.0        dplyr_1.0.3        </span>
 <span class="co">#&gt; [39] MASS_7.3-53         bitops_1.0-6       </span>
 <span class="co">#&gt; [41] grid_4.1.0          gtable_0.3.0       </span>
 <span class="co">#&gt; [43] lifecycle_0.2.0     magrittr_2.0.1     </span>
-<span class="co">#&gt; [45] scales_1.1.1        KernSmooth_2.23-18 </span>
-<span class="co">#&gt; [47] statip_0.2.3        stringi_1.5.3      </span>
-<span class="co">#&gt; [49] ROCR_1.0-11         fs_1.5.0           </span>
-<span class="co">#&gt; [51] rmutil_1.1.5        limma_3.47.3       </span>
-<span class="co">#&gt; [53] timeDate_3043.102   ellipsis_0.3.1     </span>
-<span class="co">#&gt; [55] ragg_0.4.1          generics_0.1.0     </span>
-<span class="co">#&gt; [57] vctrs_0.3.6         vioplot_0.3.5      </span>
-<span class="co">#&gt; [59] modeest_2.4.0       tools_4.1.0        </span>
-<span class="co">#&gt; [61] glue_1.4.2          markdown_1.1       </span>
-<span class="co">#&gt; [63] purrr_0.3.4         yaml_2.2.1         </span>
-<span class="co">#&gt; [65] clue_0.3-58         colorspace_2.0-0   </span>
-<span class="co">#&gt; [67] cluster_2.1.0       BiocManager_1.30.10</span>
-<span class="co">#&gt; [69] caTools_1.18.1      timeSeries_3062.100</span>
-<span class="co">#&gt; [71] memoise_1.1.0       knitr_1.31</span></code></pre></div>
+<span class="co">#&gt; [45] scales_1.1.1        statip_0.2.3       </span>
+<span class="co">#&gt; [47] KernSmooth_2.23-18  stringi_1.5.3      </span>
+<span class="co">#&gt; [49] cachem_1.0.3        ROCR_1.0-11        </span>
+<span class="co">#&gt; [51] fs_1.5.0            rmutil_1.1.5       </span>
+<span class="co">#&gt; [53] limma_3.47.6        timeDate_3043.102  </span>
+<span class="co">#&gt; [55] ellipsis_0.3.1      ragg_0.4.1         </span>
+<span class="co">#&gt; [57] generics_0.1.0      vctrs_0.3.6        </span>
+<span class="co">#&gt; [59] vioplot_0.3.5       modeest_2.4.0      </span>
+<span class="co">#&gt; [61] tools_4.1.0         glue_1.4.2         </span>
+<span class="co">#&gt; [63] markdown_1.1        purrr_0.3.4        </span>
+<span class="co">#&gt; [65] fastmap_1.1.0       yaml_2.2.1         </span>
+<span class="co">#&gt; [67] clue_0.3-58         colorspace_2.0-0   </span>
+<span class="co">#&gt; [69] cluster_2.1.0       BiocManager_1.30.10</span>
+<span class="co">#&gt; [71] caTools_1.18.1      timeSeries_3062.100</span>
+<span class="co">#&gt; [73] memoise_2.0.0       knitr_1.31</span></code></pre></div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

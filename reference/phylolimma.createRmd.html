@@ -135,6 +135,7 @@
   extraDesignFactors <span class='op'>=</span> <span class='cn'>NULL</span>,
   lengthNormalization <span class='op'>=</span> <span class='st'>"RPKM"</span>,
   dataTransformation <span class='op'>=</span> <span class='st'>"log2"</span>,
+  use_eBayes <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -176,6 +177,10 @@
     <tr>
       <th>dataTransformation</th>
       <td><p>one of "log2", "asin(sqrt)" or "sqrt". Data transformation to apply to the normalized data.</p></td>
+    </tr>
+    <tr>
+      <th>use_eBayes</th>
+      <td><p>boolean, whether to use <code><a href='https://rdrr.io/pkg/limma/man/ebayes.html'>eBayes</a></code> to moderate the t.values. Default to TRUE.</p></td>
     </tr>
     <tr>
       <th>...</th>
