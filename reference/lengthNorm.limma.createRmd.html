@@ -58,9 +58,18 @@
 
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -117,7 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate a <code>.Rmd</code> file containing code to perform differential expression analysis with sqrtTPM+limma</h1>
-    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExp.R'><code>R/generateRmdCodeDiffExp.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExpPhylo.R'><code>R/generateRmdCodeDiffExpPhylo.R</code></a></small>
     <div class="hidden name"><code>lengthNorm.limma.createRmd.Rd</code></div>
     </div>
 
@@ -133,6 +142,7 @@
   extraDesignFactors <span class='op'>=</span> <span class='cn'>NULL</span>,
   lengthNormalization <span class='op'>=</span> <span class='st'>"RPKM"</span>,
   dataTransformation <span class='op'>=</span> <span class='st'>"log2"</span>,
+  trend <span class='op'>=</span> <span class='cn'>FALSE</span>,
   blockFactor <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
@@ -168,6 +178,10 @@
       <td><p>one of "log2", "asin(sqrt)" or "sqrt". Data transformation to apply to the normalized data.</p></td>
     </tr>
     <tr>
+      <th>trend</th>
+      <td><p>if <code>use_eBayes=TRUE</code>, should an intensity-trend be allowed for the prior variance? Default to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
       <th>blockFactor</th>
       <td><p>Name of the factor specifying a blocking variable, to be passed to <code><a href='https://rdrr.io/pkg/limma/man/dupcor.html'>duplicateCorrelation</a></code>. All the factors need to be a <code>sample.annotations</code> from the <code><a href='compData.html'>compData</a></code> object. Default to null (no block structure).</p></td>
     </tr>
@@ -188,7 +202,7 @@ is used to normalize the counts, by computing the square root of the TPM.</p>
 <p>Musser, JM, Wagner, GP. (2015): Character trees from transcriptome data: Origin and individuation of morphological characters and the so‐called “species signal”. J. Exp. Zool. (Mol. Dev. Evol.) 324B: 588– 604.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Charlotte Soneson</p>
+    <p>Charlotte Soneson, Paul Bastide, Mélina Gallopin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span>
@@ -201,11 +215,25 @@ is used to normalize the counts, by computing the square root of the TPM.</p>
                                     lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
                                     output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"length.limma"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"length.limma.createRmd"</span>, 
+           Rmdfunction <span class='op'>=</span> <span class='st'>"lengthNorm.limma.createRmd"</span>, 
            output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Error in eval(parse(text = Rmdfunction)) : 
-#&gt;   object 'length.limma.createRmd' not found</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: After 100 tries, could not generate non-zero lengths for gene 597. Replacing zeros with the provided mean.</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpgwgN1k/tempcode1e373759b6f.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
+#&gt;   ordinary text without R code
+#&gt; 
+#&gt;   |                                                                              |......................................................................| 100%
+#&gt; label: unnamed-chunk-1 (with options) 
+#&gt; List of 6
+#&gt;  $ echo   : logi TRUE
+#&gt;  $ eval   : logi TRUE
+#&gt;  $ include: logi TRUE
+#&gt;  $ message: logi FALSE
+#&gt;  $ error  : logi TRUE
+#&gt;  $ warning: logi TRUE
+#&gt; 
+#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpgwgN1k/tempcode1e373759b6f.md</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -218,11 +246,11 @@ is used to normalize the counts, by computing the square root of the TPM.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Charlotte Soneson.</p>
+  <p><p>Developed by Charlotte Soneson.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -230,6 +258,8 @@ is used to normalize the counts, by computing the square root of the TPM.</p>
 
   
 
+
+  
 
   </body>
 </html>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a list with data and results to a compData object — convertListTocompData • phylocompcodeR</title>
+<title>Convert a list with data and results to a phyloCompData object — convertListTophyloCompData • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Convert a list with data and results to a compData object — convertListTocompData" />
-<meta property="og:description" content="Given a list with data and results (resulting e.g. from compcodeR version 0.1.0), convert it to a compData object." />
+<meta property="og:title" content="Convert a list with data and results to a phyloCompData object — convertListTophyloCompData" />
+<meta property="og:description" content="Given a list with data and results (resulting e.g. from compcodeR version 0.1.0), convert it to a phyloCompData object." />
 
 
 
@@ -125,16 +125,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a list with data and results to a <code>compData</code> object</h1>
+    <h1>Convert a list with data and results to a <code>phyloCompData</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/AllClasses.R'><code>R/AllClasses.R</code></a></small>
-    <div class="hidden name"><code>convertListTocompData.Rd</code></div>
+    <div class="hidden name"><code>convertListTophyloCompData.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given a list with data and results (resulting e.g. from <code>compcodeR</code> version 0.1.0), convert it to a <code>compData</code> object.</p>
+    <p>Given a list with data and results (resulting e.g. from <code>compcodeR</code> version 0.1.0), convert it to a <code>phyloCompData</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='va'>inp.list</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>convertListTophyloCompData</span><span class='op'>(</span><span class='va'>inp.list</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,14 +147,22 @@
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Charlotte Soneson</p>
+    <p>Charlotte Soneson, Paul Bastide</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>count.matrix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span>,
-                           sample.annotations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-                           info.parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, 
-                           uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; An object of class compData 
+    <pre class="examples"><div class='input'><span class='va'>count.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>sample.annotations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>info.parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span>
+<span class='va'>tree</span> <span class='op'>&lt;-</span> <span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/rlineage.html'>rphylo</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>length.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>count.matrix</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>length.matrix</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sample.annotations</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>tree</span><span class='op'>$</span><span class='va'>tip.label</span>
+<span class='fu'>convertListTophyloCompData</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>count.matrix <span class='op'>=</span> <span class='va'>count.matrix</span>,
+                                sample.annotations <span class='op'>=</span> <span class='va'>sample.annotations</span>,
+                                info.parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, 
+                                                       uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span>,
+                                 tree <span class='op'>=</span> <span class='va'>tree</span>,
+                                 length.matrix <span class='op'>=</span> <span class='va'>length.matrix</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; An object of class phyloCompData 
 #&gt; Dataset name: mydata 
 #&gt; Number of samples: 4 
 #&gt; Number of variables: 1000 
@@ -164,25 +172,44 @@
 #&gt; No differential expression analysis has been performed. 
 #&gt; 
 #&gt; count.matrix:
-#&gt;      [,1] [,2] [,3] [,4]
-#&gt; [1,]  949  405  624  780
-#&gt; [2,]  546  672   40   16
-#&gt; [3,]  256  716  455  321
-#&gt; [4,]  868   12  274  595
-#&gt; [5,]  358  198  373  873
-#&gt; [6,]  466  302  146  258
+#&gt;       t1  t2  t3  t4
+#&gt; [1,] 378 878 417 711
+#&gt; [2,] 933 436 307 205
+#&gt; [3,] 950 240 894 558
+#&gt; [4,] 635 108 346 307
+#&gt; [5,] 709  28  91 181
+#&gt; [6,] 871 768 159 109
 #&gt; + 994 rows...
 #&gt; 
 #&gt; sample.annotations:
-#&gt;   condition
-#&gt; 1         1
-#&gt; 2         1
-#&gt; 3         2
-#&gt; 4         2
+#&gt;    condition
+#&gt; t1         1
+#&gt; t2         1
+#&gt; t3         2
+#&gt; t4         2
 #&gt; 
 #&gt; variable.annotations:
 #&gt; data frame with 0 columns and 0 rows
-#&gt; </div></pre>
+#&gt; 
+#&gt; Phylogenetic tree:
+#&gt; 
+#&gt; Phylogenetic tree with 4 tips and 3 internal nodes.
+#&gt; 
+#&gt; Tip labels:
+#&gt;   t1, t2, t3, t4
+#&gt; 
+#&gt; Rooted; includes branch lengths.
+#&gt; 
+#&gt; length.matrix:
+#&gt;       t1  t2  t3  t4
+#&gt; [1,] 741  64 523 441
+#&gt; [2,] 122 599 694 835
+#&gt; [3,] 765 919 564 116
+#&gt; [4,] 393 530 635 433
+#&gt; [5,] 471 254 201 136
+#&gt; [6,] 927 223 126 865
+#&gt; </div><div class='input'>                                 
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -58,9 +58,16 @@
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -142,7 +149,6 @@
 <dt><code>method.names</code>:</dt><dd><p>(If a differential expression analysis has been performed and the results are included in the <code>compData</code> object). A list, containing the name of the method used for the differential expression analysis. The list should have two entries: <code>full.name</code> and <code>short.name</code>, where the <code>full.name</code> is the full (potentially long) name identifying the method, and <code>short.name</code> may be an abbreviation. Class <code>list</code></p></dd>
 <dt><code>code</code>:</dt><dd><p>(If a differential expression analysis has been performed and the results are included in the <code>compData</code> object). A character string containing the code that was used to run the differential expression analysis. The code should be in R markdown format. Class <code>character</code></p></dd>
 <dt><code>result.table</code>:</dt><dd><p>(If a differential expression analysis has been performed and the results are included in the <code>compData</code> object). Contains the results of the differential expression analysis, in the form of a data frame with one row per gene. Must contain at least one column named <code>score</code>, where a higher value corresponds to 'more strongly differentially expressed genes'. Class <code>data.frame</code></p></dd>
-<dt><code>length.matrix</code>:</dt><dd><p>The length matrix, with genes as rows and samples as columns.  Class <code>matrix</code></p></dd>
 
 </dl>
 
@@ -181,9 +187,6 @@ Get or set the code slot in a <code>compData</code> object. <code>value</code> s
 <dt>result.table</dt><dd><p><code>signature(x="compData")</code></p></dd>
 <dt>result.table&lt;-</dt><dd><p><code>signature(x="compData",value="data.frame")</code>:
 Get or set the result table in a <code>compData</code> object. <code>value</code> should be a data frame with one row per gene, and at least a column named 'score'.</p></dd>
-<dt>length.matrix</dt><dd><p><code>signature(x="compData")</code></p></dd>
-<dt>length.matrix&lt;-</dt><dd><p><code>signature(x="compData",value="matrix")</code>:
-Get or set the length matrix in a <code>compData</code> object. <code>value</code> should be a numeric matrix.</p></dd>
 
 </dl>
 
@@ -207,11 +210,11 @@ Get or set the length matrix in a <code>compData</code> object. <code>value</cod
 
       <footer>
       <div class="copyright">
-  <p>Developed by Charlotte Soneson.</p>
+  <p><p>Developed by Charlotte Soneson.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -219,6 +222,8 @@ Get or set the length matrix in a <code>compData</code> object. <code>value</cod
 
   
 
+
+  
 
   </body>
 </html>

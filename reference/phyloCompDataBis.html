@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • phylocompcodeR</title>
+<title>Create a phyloCompData object — phyloCompDataBis • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Create a phyloCompData object — phyloCompDataBis" />
+<meta property="og:description" content="The phyloCompData class extends the compData class
+with sequence length and phylogeny related information." />
 
 
 
@@ -67,7 +69,7 @@
   <body data-spy="scroll" data-target="#toc">
     
 
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -122,18 +124,51 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Create a <code>phyloCompData</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/AllClasses.R'><code>R/AllClasses.R</code></a></small>
+    <div class="hidden name"><code>phyloCompDataBis.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="compcodeR.html">Comparing methods for differential expression analysis of RNAseq data with the compcodeR package</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>The <code>phyloCompData</code> class extends the <code><a href='compData.html'>compData</a></code> class
+with sequence length and phylogeny related information.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>phyloCompDataBis</span><span class='op'>(</span>
+  <span class='va'>compDataObject</span>,
+  tree <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  length.matrix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='cn'>NA_integer_</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>compDataObject</th>
+      <td><p>An object of class <code><a href='compData.html'>compData</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>tree</th>
+      <td><p>A phylogenetic tree describing the relationships between samples.</p></td>
+    </tr>
+    <tr>
+      <th>length.matrix</th>
+      <td><p>A length matrix, with genes as rows and observations as columns.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>phyloCompData</code> object.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Charlotte Soneson, Paul Bastide</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

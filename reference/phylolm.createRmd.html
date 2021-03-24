@@ -58,9 +58,18 @@
 
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -226,7 +235,7 @@ object is used to normalize the counts.</p><dl>
            extraDesignFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"test_factor"</span>, <span class='st'>"test_reg"</span><span class='op'>)</span>,
            lengthNormalization <span class='op'>=</span> <span class='st'>"RPKM"</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: phylolm</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vector 'id.species' must be a factor. Transforming.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `id.species` and/or the tips of the phylogeny are not named. Could not check for consistency : please make sure that you gave them in the right order.</span></div><div class='output co'>#&gt; Error in sample.annotations(mydata.obj)$test_factor &lt;- factor(rep(1:2,  : 
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: ape</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: phylolm</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vector 'id.species' must be a factor. Transforming.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `id.species` is not named. I'm naming them, assuming they are in the same order as the tree.</span></div><div class='output co'>#&gt; Error in sample.annotations(mydata.obj)$test_factor &lt;- factor(rep(1:2,  : 
 #&gt;   could not find function "sample.annotations"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -239,11 +248,11 @@ object is used to normalize the counts.</p><dl>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Charlotte Soneson.</p>
+  <p><p>Developed by Charlotte Soneson.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -251,6 +260,8 @@ object is used to normalize the counts.</p><dl>
 
   
 
+
+  
 
   </body>
 </html>

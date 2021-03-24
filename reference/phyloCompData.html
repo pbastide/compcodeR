@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a compData object — compData • phylocompcodeR</title>
+<title>Create a phyloCompData object — phyloCompData • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Create a compData object — compData" />
-<meta property="og:description" content="The compData class is used to store information about the experiment, such as the count matrix, sample and variable annotations, information regarding the generation of the data and results from applying a differential expression analysis to the data. This constructor function creates a compData object." />
+<meta property="og:title" content="Create a phyloCompData object — phyloCompData" />
+<meta property="og:description" content="The phyloCompData class extends the compData class
+with sequence length and phylogeny related information." />
 
 
 
@@ -125,16 +126,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a <code>compData</code> object</h1>
+    <h1>Create a <code>phyloCompData</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/AllClasses.R'><code>R/AllClasses.R</code></a></small>
-    <div class="hidden name"><code>compData.Rd</code></div>
+    <div class="hidden name"><code>phyloCompData.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The <code>compData</code> class is used to store information about the experiment, such as the count matrix, sample and variable annotations, information regarding the generation of the data and results from applying a differential expression analysis to the data. This constructor function creates a <code>compData</code> object.</p>
+    <p>The <code>phyloCompData</code> class extends the <code><a href='compData.html'>compData</a></code> class
+with sequence length and phylogeny related information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>compData</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>phyloCompData</span><span class='op'>(</span>
   <span class='va'>count.matrix</span>,
   <span class='va'>sample.annotations</span>,
   <span class='va'>info.parameters</span>,
@@ -144,7 +146,9 @@
   package.version <span class='op'>=</span> <span class='st'>""</span>,
   method.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   code <span class='op'>=</span> <span class='st'>""</span>,
-  result.table <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span>
+  result.table <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span>,
+  tree <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  length.matrix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='cn'>NA_integer_</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -240,20 +244,33 @@
 <li><p><code>dispersion.S2</code> dispersion estimates in condition S2</p></li>
 </ul></td>
     </tr>
+    <tr>
+      <th>tree</th>
+      <td><p>A phylogenetic tree describing the relationships between samples.</p></td>
+    </tr>
+    <tr>
+      <th>length.matrix</th>
+      <td><p>A length matrix, with genes as rows and observations as columns.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>compData</code> object.</p>
+    <p>A <code>phyloCompData</code> object.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Charlotte Soneson</p>
+    <p>Charlotte Soneson, Paul Bastide</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>count.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>sample.annotations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>info.parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span>
-<span class='va'>cpd</span> <span class='op'>&lt;-</span> <span class='fu'>compData</span><span class='op'>(</span><span class='va'>count.matrix</span>, <span class='va'>sample.annotations</span>, <span class='va'>info.parameters</span><span class='op'>)</span>
+<span class='va'>tree</span> <span class='op'>&lt;-</span> <span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/rlineage.html'>rphylo</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>length.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>count.matrix</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>length.matrix</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sample.annotations</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>tree</span><span class='op'>$</span><span class='va'>tip.label</span>
+<span class='va'>cpd</span> <span class='op'>&lt;-</span> <span class='fu'>phyloCompData</span><span class='op'>(</span><span class='va'>count.matrix</span>, <span class='va'>sample.annotations</span>, <span class='va'>info.parameters</span>,
+                     tree <span class='op'>=</span> <span class='va'>tree</span>, length.matrix <span class='op'>=</span> <span class='va'>length.matrix</span><span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

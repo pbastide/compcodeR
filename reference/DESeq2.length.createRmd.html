@@ -58,9 +58,18 @@
 
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -117,7 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate a <code>.Rmd</code> file containing code to perform differential expression analysis with DESeq2 with custom model matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExp.R'><code>R/generateRmdCodeDiffExp.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/generateRmdCodeDiffExpPhylo.R'><code>R/generateRmdCodeDiffExpPhylo.R</code></a></small>
     <div class="hidden name"><code>DESeq2.length.createRmd.Rd</code></div>
     </div>
 
@@ -195,7 +204,11 @@
 
     <p>For more information about the methods and the interpretation of the parameters, see the <code>DESeq2</code> package and the corresponding publications.</p>
 
-<p>The length matrix are used as a normalization factor and applied to the <code>DESeq2</code> model in the way explained in <code><a href='https://rdrr.io/pkg/DESeq2/man/normalizationFactors.html'>normalizationFactors</a></code> (see details and examples of this funtion). The provided matrix will be multiplied by the default normalization factor obtained through the <code><a href='https://rdrr.io/pkg/DESeq2/man/estimateSizeFactors.html'>estimateSizeFactors</a></code> function.</p>
+<p>The length matrix are used as a normalization factor and applied to the <code>DESeq2</code>
+model in the way explained in <code><a href='https://rdrr.io/pkg/DESeq2/man/normalizationFactors.html'>normalizationFactors</a></code>
+(see details and examples of this function).
+The provided matrix will be multiplied by the default normalization factor 
+obtained through the <code><a href='https://rdrr.io/pkg/DESeq2/man/estimateSizeFactors.html'>estimateSizeFactors</a></code> function.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Anders S and Huber W (2010): Differential expression analysis for sequence count data. Genome Biology 11:R106</p>
@@ -237,11 +250,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Charlotte Soneson.</p>
+  <p><p>Developed by Charlotte Soneson.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -249,6 +262,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Show method for compData object — show,compData-method • phylocompcodeR</title>
+<title>Show method for phyloCompData object — show,phyloCompData-method • phylocompcodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Show method for compData object — show,compData-method" />
-<meta property="og:description" content="Show method for compData object." />
+<meta property="og:title" content="Show method for phyloCompData object — show,phyloCompData-method" />
+<meta property="og:description" content="Show method for phyloCompData object." />
 
 
 
@@ -125,16 +125,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Show method for <code>compData</code> object</h1>
+    <h1>Show method for <code>phyloCompData</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/csoneson/compcodeR/blob/master/R/show-methods.R'><code>R/show-methods.R</code></a></small>
-    <div class="hidden name"><code>show-compData-method.Rd</code></div>
+    <div class="hidden name"><code>show-phyloCompData-method.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Show method for <code>compData</code> object.</p>
+    <p>Show method for <code>phyloCompData</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for compData</span>
+    <pre class="usage"><span class='co'># S4 method for phyloCompData</span>
 <span class='fu'><a href='https://rdrr.io/pkg/TCC/man/TCC-class.html'>show</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -142,55 +142,58 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>A <code>compData</code> object</p></td>
+      <td><p>A <code>phyloCompData</code> object</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Charlotte Soneson</p>
+    <p>Charlotte Soneson, Paul Bastide</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>mydata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>12500</span>, 
-                                samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>1250</span><span class='op'>)</span>
-<span class='va'>mydata</span>
-</div><div class='output co'>#&gt; An object of class compData 
+    <pre class="examples"><div class='input'><span class='va'>mydata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, 
+                                samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>,
+                                id.species <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>,
+                                tree <span class='op'>=</span> <span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/rlineage.html'>rphylo</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>,
+                                lengths.relmeans <span class='op'>=</span> <span class='st'>"auto"</span>, lengths.dispersions <span class='op'>=</span> <span class='st'>"auto"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `id.species` is not named. I'm naming them, assuming they are in the same order as the tree.</span></div><div class='input'><span class='va'>mydata</span>
+</div><div class='output co'>#&gt; An object of class phyloCompData 
 #&gt; Dataset name: mydata 
 #&gt; Number of samples: 10 
-#&gt; Number of variables: 12496 
+#&gt; Number of variables: 1000 
 #&gt; Number of random outliers: 0 
 #&gt; Number of single outliers: 0 
-#&gt; Number of known truly differentially expressed genes: 1249 
+#&gt; Number of known truly differentially expressed genes: 100 
 #&gt; No differential expression analysis has been performed. 
 #&gt; 
 #&gt; count.matrix:
-#&gt;    sample1 sample2 sample3 sample4 sample5 sample6
-#&gt; g1     193     133     647     155     554     984
-#&gt; g2      12      23      13       2      23     105
-#&gt; g3       9       4       5       9       5       6
-#&gt; g4      92      26     382     303      90     679
-#&gt; g5       6       0       1       2       4       1
-#&gt; g6      64       1      74       1       4       0
-#&gt; + 12490 rows and 4 cols...
+#&gt;       t1    t2    t3    t4    t5    t6
+#&gt; g1   677   464   623   540   994  1244
+#&gt; g2   212    91   136   469    38   320
+#&gt; g3  8650  3501  5651 10353  5132 20182
+#&gt; g4  2244   918  1921   786  3791 12941
+#&gt; g5  1408  2153  3537  2927  1555  4067
+#&gt; g6 19796 23016 32019 12395 49297 34190
+#&gt; + 994 rows and 4 cols...
 #&gt; 
 #&gt; sample.annotations:
-#&gt;         condition depth.factor
-#&gt; sample1         1    1.1056572
-#&gt; sample2         1    0.7308826
-#&gt; sample3         1    0.9092396
-#&gt; sample4         1    0.7554423
-#&gt; sample5         1    0.7896034
-#&gt; sample6         2    1.2143119
+#&gt;    condition depth.factor id.species id.condition
+#&gt; t1         1    1.1059100          1            1
+#&gt; t2         1    0.8032296          2            1
+#&gt; t3         1    1.1182325          3            1
+#&gt; t4         1    1.1147645          4            1
+#&gt; t5         1    1.3286844          5            1
+#&gt; t6         2    0.8657358          6            2
 #&gt; + 4 rows...
 #&gt; 
 #&gt; variable.annotations:
 #&gt;    truedispersions.S1 truedispersions.S2 truemeans.S1 truemeans.S2
-#&gt; g1          0.1014581          0.1014581   140.292683   423.447594
-#&gt; g2          0.3543401          0.3543401     8.463415    20.212813
-#&gt; g3          0.2651239          0.2651239     2.719298     4.264236
-#&gt; g4          0.3812041          0.3812041    86.463415   214.521705
-#&gt; g5          0.5372781          0.5372781     1.403509     3.001202
-#&gt; g6          5.1236532          5.1236532    10.780488    38.812221
+#&gt; g1         0.06746282         0.06746282     91.07018    186.80398
+#&gt; g2         0.35363024         0.35363024     20.24390     41.06688
+#&gt; g3         0.10650664         0.10650664    249.17544    793.82092
+#&gt; g4         0.22208438         0.22208438     39.14634    206.19044
+#&gt; g5         0.11717587         0.11717587    229.14634    504.91998
+#&gt; g6         0.08663472         0.08663472    464.22807    933.00555
 #&gt;    n.random.outliers.up.S1 n.random.outliers.up.S2 n.random.outliers.down.S1
 #&gt; g1                       0                       0                         0
 #&gt; g2                       0                       0                         0
@@ -205,21 +208,46 @@
 #&gt; g4                         0                       0                       0
 #&gt; g5                         0                       0                       0
 #&gt; g6                         0                       0                       0
-#&gt;    n.single.outliers.down.S1 n.single.outliers.down.S2    M.value  A.value
-#&gt; g1                         0                         0  1.6580385 8.973865
-#&gt; g2                         0                         0  2.1235724 4.694314
-#&gt; g3                         0                         0  0.2719910 2.919482
-#&gt; g4                         0                         0  1.8926089 7.929666
-#&gt; g5                         0                         0  0.9512174 1.697618
-#&gt; g6                         0                         0 -3.2563263 1.552444
+#&gt;    n.single.outliers.down.S1 n.single.outliers.down.S2   M.value   A.value
+#&gt; g1                         0                         0 0.9084921  9.659980
+#&gt; g2                         0                         0 1.5140718  7.742311
+#&gt; g3                         0                         0 1.7738109 13.371876
+#&gt; g4                         0                         0 2.1714704 11.652939
+#&gt; g5                         0                         0 1.1464079 11.550079
+#&gt; g6                         0                         0 0.6879611 14.816299
 #&gt;    truelog2foldchanges upregulation downregulation differential.expression
-#&gt; g1           1.5937437            1              0                       1
-#&gt; g2           1.2559583            1              0                       1
-#&gt; g3           0.6490528            1              0                       1
-#&gt; g4           1.3109619            1              0                       1
-#&gt; g5           1.0965022            1              0                       1
-#&gt; g6           1.8480885            1              0                       1
-#&gt; + 12490 rows...
+#&gt; g1            1.036475            1              0                       1
+#&gt; g2            1.020488            1              0                       1
+#&gt; g3            1.671652            1              0                       1
+#&gt; g4            2.397028            1              0                       1
+#&gt; g5            1.139786            1              0                       1
+#&gt; g6            1.007052            1              0                       1
+#&gt;    lengths.relmeans lengths.dispersions M.value.TPM A.value.TPM
+#&gt; g1         1048.357         0.002140625   0.9137434  -0.3109954
+#&gt; g2         3344.571         1.012137002   0.8081918  -2.6379876
+#&gt; g3         5960.214         0.295973014   1.4061421   1.3670502
+#&gt; g4         5180.857         0.239087670   2.4666154  -0.6862882
+#&gt; g5         3419.000         0.468503762   1.0678868   0.7691664
+#&gt; g6         6651.714         0.257245838   1.1252715   1.7610089
+#&gt; + 994 rows...
+#&gt; 
+#&gt; Phylogenetic tree:
+#&gt; 
+#&gt; Phylogenetic tree with 10 tips and 9 internal nodes.
+#&gt; 
+#&gt; Tip labels:
+#&gt;   t1, t2, t3, t4, t5, t6, ...
+#&gt; 
+#&gt; Rooted; includes branch lengths.
+#&gt; 
+#&gt; length.matrix:
+#&gt;      t1    t2    t3   t4    t5   t6
+#&gt; g1 1017   966   969 1004  1033  948
+#&gt; g2 1352   797   675 3133   522 1478
+#&gt; g3 4357  2609  3214 5569  2928 5110
+#&gt; g4 5965  5802  6721 3340  7706 8664
+#&gt; g5 1001  2301  2408 2868   889 1723
+#&gt; g6 8443 10457 10574 5099 19246 7769
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
