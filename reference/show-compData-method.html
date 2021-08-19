@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,8 +134,8 @@
     <p>Show method for <code>compData</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for compData</span>
-<span class='fu'><a href='https://rdrr.io/pkg/TCC/man/TCC-class.html'>show</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S4 method for compData</span>
+<span class='fu'><a href='https://rdrr.io/r/methods/show.html'>show</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,76 +151,77 @@
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>mydata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>12500</span>, 
-                                samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>1250</span><span class='op'>)</span>
-<span class='va'>mydata</span>
-</div><div class='output co'>#&gt; An object of class compData 
-#&gt; Dataset name: mydata 
-#&gt; Number of samples: 10 
-#&gt; Number of variables: 12496 
-#&gt; Number of random outliers: 0 
-#&gt; Number of single outliers: 0 
-#&gt; Number of known truly differentially expressed genes: 1249 
-#&gt; No differential expression analysis has been performed. 
-#&gt; 
-#&gt; count.matrix:
-#&gt;    sample1 sample2 sample3 sample4 sample5 sample6
-#&gt; g1     193     133     647     155     554     984
-#&gt; g2      12      23      13       2      23     105
-#&gt; g3       9       4       5       9       5       6
-#&gt; g4      92      26     382     303      90     679
-#&gt; g5       6       0       1       2       4       1
-#&gt; g6      64       1      74       1       4       0
-#&gt; + 12490 rows and 4 cols...
-#&gt; 
-#&gt; sample.annotations:
-#&gt;         condition depth.factor
-#&gt; sample1         1    1.1056572
-#&gt; sample2         1    0.7308826
-#&gt; sample3         1    0.9092396
-#&gt; sample4         1    0.7554423
-#&gt; sample5         1    0.7896034
-#&gt; sample6         2    1.2143119
-#&gt; + 4 rows...
-#&gt; 
-#&gt; variable.annotations:
-#&gt;    truedispersions.S1 truedispersions.S2 truemeans.S1 truemeans.S2
-#&gt; g1          0.1014581          0.1014581   140.292683   423.447594
-#&gt; g2          0.3543401          0.3543401     8.463415    20.212813
-#&gt; g3          0.2651239          0.2651239     2.719298     4.264236
-#&gt; g4          0.3812041          0.3812041    86.463415   214.521705
-#&gt; g5          0.5372781          0.5372781     1.403509     3.001202
-#&gt; g6          5.1236532          5.1236532    10.780488    38.812221
-#&gt;    n.random.outliers.up.S1 n.random.outliers.up.S2 n.random.outliers.down.S1
-#&gt; g1                       0                       0                         0
-#&gt; g2                       0                       0                         0
-#&gt; g3                       0                       0                         0
-#&gt; g4                       0                       0                         0
-#&gt; g5                       0                       0                         0
-#&gt; g6                       0                       0                         0
-#&gt;    n.random.outliers.down.S2 n.single.outliers.up.S1 n.single.outliers.up.S2
-#&gt; g1                         0                       0                       0
-#&gt; g2                         0                       0                       0
-#&gt; g3                         0                       0                       0
-#&gt; g4                         0                       0                       0
-#&gt; g5                         0                       0                       0
-#&gt; g6                         0                       0                       0
-#&gt;    n.single.outliers.down.S1 n.single.outliers.down.S2    M.value  A.value
-#&gt; g1                         0                         0  1.6580385 8.973865
-#&gt; g2                         0                         0  2.1235724 4.694314
-#&gt; g3                         0                         0  0.2719910 2.919482
-#&gt; g4                         0                         0  1.8926089 7.929666
-#&gt; g5                         0                         0  0.9512174 1.697618
-#&gt; g6                         0                         0 -3.2563263 1.552444
-#&gt;    truelog2foldchanges upregulation downregulation differential.expression
-#&gt; g1           1.5937437            1              0                       1
-#&gt; g2           1.2559583            1              0                       1
-#&gt; g3           0.6490528            1              0                       1
-#&gt; g4           1.3109619            1              0                       1
-#&gt; g5           1.0965022            1              0                       1
-#&gt; g6           1.8480885            1              0                       1
-#&gt; + 12490 rows...
-#&gt; </div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>mydata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>12500</span>, </span>
+<span class='r-in'>                                samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>1250</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mydata</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> An object of class compData </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dataset name: mydata </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of samples: 10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of variables: 12496 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of random outliers: 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of single outliers: 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of known truly differentially expressed genes: 1249 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> No differential expression analysis has been performed. </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> count.matrix:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    sample1 sample2 sample3 sample4 sample5 sample6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1     193     133     647     155     554     984</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2      12      23      13       2      23     105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3       9       4       5       9       5       6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4      92      26     382     303      90     679</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5       6       0       1       2       4       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6      64       1      74       1       4       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + 12490 rows and 4 cols...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample.annotations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         condition depth.factor</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample1         1    1.1056572</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample2         1    0.7308826</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample3         1    0.9092396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample4         1    0.7554423</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample5         1    0.7896034</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample6         2    1.2143119</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + 4 rows...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> variable.annotations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    truedispersions.S1 truedispersions.S2 truemeans.S1 truemeans.S2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1          0.1014581          0.1014581   140.292683   423.447594</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2          0.3543401          0.3543401     8.463415    20.212813</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3          0.2651239          0.2651239     2.719298     4.264236</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4          0.3812041          0.3812041    86.463415   214.521705</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5          0.5372781          0.5372781     1.403509     3.001202</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6          5.1236532          5.1236532    10.780488    38.812221</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    n.random.outliers.up.S1 n.random.outliers.up.S2 n.random.outliers.down.S1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6                       0                       0                         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    n.random.outliers.down.S2 n.single.outliers.up.S1 n.single.outliers.up.S2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6                         0                       0                       0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    n.single.outliers.down.S1 n.single.outliers.down.S2    M.value  A.value</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1                         0                         0  1.6580385 8.973865</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2                         0                         0  2.1235724 4.694314</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3                         0                         0  0.2719910 2.919482</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4                         0                         0  1.8926089 7.929666</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5                         0                         0  0.9512174 1.697618</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6                         0                         0 -3.2563263 1.552444</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    truelog2foldchanges upregulation downregulation differential.expression</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g1           1.5937437            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g2           1.2559583            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g3           0.6490528            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g4           1.3109619            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g5           1.0965022            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> g6           1.8480885            1              0                       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + 12490 rows...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

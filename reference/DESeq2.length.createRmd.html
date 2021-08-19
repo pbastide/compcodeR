@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) using the DESeq2 package. The code is written to a <code>.Rmd</code> file. This function is generally not called by the user, the main interface for performing differential expression analysis is the <code><a href='runDiffExp.html'>runDiffExp</a></code> function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>DESeq2.length.createRmd</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>DESeq2.length.createRmd</span><span class='op'>(</span>
   <span class='va'>data.path</span>,
   <span class='va'>result.path</span>,
   <span class='va'>codefile</span>,
@@ -146,7 +146,7 @@
   impute.outliers <span class='op'>=</span> <span class='cn'>TRUE</span>,
   extraDesignFactors <span class='op'>=</span> <span class='cn'>NULL</span>,
   divByLengths <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,7 +208,7 @@
 model in the way explained in <code><a href='https://rdrr.io/pkg/DESeq2/man/normalizationFactors.html'>normalizationFactors</a></code>
 (see details and examples of this function).
 The provided matrix will be multiplied by the default normalization factor 
-obtained through the <code><a href='https://rdrr.io/pkg/DESeq2/man/estimateSizeFactors.html'>estimateSizeFactors</a></code> function.</p>
+obtained through the <code>estimateSizeFactors</code> function.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Anders S and Huber W (2010): Differential expression analysis for sequence count data. Genome Biology 11:R106</p>
@@ -217,28 +217,30 @@ obtained through the <code><a href='https://rdrr.io/pkg/DESeq2/man/estimateSizeF
     <p>Charlotte Soneson, Paul Bastide, Mélina Gallopin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, 
-                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, 
-                                    id.species <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,
-                                    lengths.relmeans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1000</span><span class='op'>)</span>,
-                                    lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
-                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>## Add annotations</span>
-<span class='fu'>sample.annotations</span><span class='op'>(</span><span class='va'>mydata.obj</span><span class='op'>)</span><span class='op'>$</span><span class='va'>test_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>sample.annotations</span><span class='op'>(</span><span class='va'>mydata.obj</span><span class='op'>)</span><span class='op'>$</span><span class='va'>test_reg</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>
-<span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>mydata.obj</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>## Diff Exp</span>
-<span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"DESeq2"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"DESeq2.length.createRmd"</span>, 
-           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, fit.type <span class='op'>=</span> <span class='st'>"parametric"</span>,
-           test <span class='op'>=</span> <span class='st'>"Wald"</span>,
-           extraDesignFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"test_factor"</span>, <span class='st'>"test_reg"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Vector 'id.species' must be a factor. Transforming.</span></div><div class='output co'>#&gt; Error in sample.annotations(mydata.obj)$test_factor &lt;- factor(rep(1:2,  : 
-#&gt;   could not find function "sample.annotations"</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, </span>
+<span class='r-in'>                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, </span>
+<span class='r-in'>                                    id.species <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,</span>
+<span class='r-in'>                                    lengths.relmeans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1000</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                    lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>## Add annotations</span></span>
+<span class='r-in'><span class='fu'>sample.annotations</span><span class='op'>(</span><span class='va'>mydata.obj</span><span class='op'>)</span><span class='op'>$</span><span class='va'>test_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>sample.annotations</span><span class='op'>(</span><span class='va'>mydata.obj</span><span class='op'>)</span><span class='op'>$</span><span class='va'>test_reg</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>mydata.obj</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>## Diff Exp</span></span>
+<span class='r-in'><span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"DESeq2"</span>, </span>
+<span class='r-in'>           Rmdfunction <span class='op'>=</span> <span class='st'>"DESeq2.length.createRmd"</span>, </span>
+<span class='r-in'>           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, fit.type <span class='op'>=</span> <span class='st'>"parametric"</span>,</span>
+<span class='r-in'>           test <span class='op'>=</span> <span class='st'>"Wald"</span>,</span>
+<span class='r-in'>           extraDesignFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span><span class='op'>(</span><span class='st'>"test_factor"</span>, <span class='st'>"test_reg"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Vector 'id.species' must be a factor. Transforming.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Error in sample.annotations(mydata.obj)$test_factor &lt;- factor(rep(1:2,  : </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   could not find function "sample.annotations"</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

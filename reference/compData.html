@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>The <code>compData</code> class is used to store information about the experiment, such as the count matrix, sample and variable annotations, information regarding the generation of the data and results from applying a differential expression analysis to the data. This constructor function creates a <code>compData</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>compData</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>compData</span><span class='op'>(</span>
   <span class='va'>count.matrix</span>,
   <span class='va'>sample.annotations</span>,
   <span class='va'>info.parameters</span>,
@@ -145,7 +145,7 @@
   method.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   code <span class='op'>=</span> <span class='st'>""</span>,
   result.table <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -250,11 +250,11 @@
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>count.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>sample.annotations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>info.parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span>
-<span class='va'>cpd</span> <span class='op'>&lt;-</span> <span class='fu'>compData</span><span class='op'>(</span><span class='va'>count.matrix</span>, <span class='va'>sample.annotations</span>, <span class='va'>info.parameters</span><span class='op'>)</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>count.matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sample.annotations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>info.parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cpd</span> <span class='op'>&lt;-</span> <span class='fu'>compData</span><span class='op'>(</span><span class='va'>count.matrix</span>, <span class='va'>sample.annotations</span>, <span class='va'>info.parameters</span><span class='op'>)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

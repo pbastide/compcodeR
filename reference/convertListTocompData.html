@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>Given a list with data and results (resulting e.g. from <code>compcodeR</code> version 0.1.0), convert it to a <code>compData</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='va'>inp.list</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='va'>inp.list</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,39 +150,40 @@
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>count.matrix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span>,
-                           sample.annotations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
-                           info.parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, 
-                           uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; An object of class compData 
-#&gt; Dataset name: mydata 
-#&gt; Number of samples: 4 
-#&gt; Number of variables: 1000 
-#&gt; Number of random outliers: 0 
-#&gt; Number of single outliers: 0 
-#&gt; Number of known truly differentially expressed genes: 0 
-#&gt; No differential expression analysis has been performed. 
-#&gt; 
-#&gt; count.matrix:
-#&gt;      [,1] [,2] [,3] [,4]
-#&gt; [1,]  949  405  624  780
-#&gt; [2,]  546  672   40   16
-#&gt; [3,]  256  716  455  321
-#&gt; [4,]  868   12  274  595
-#&gt; [5,]  358  198  373  873
-#&gt; [6,]  466  302  146  258
-#&gt; + 994 rows...
-#&gt; 
-#&gt; sample.annotations:
-#&gt;   condition
-#&gt; 1         1
-#&gt; 2         1
-#&gt; 3         2
-#&gt; 4         2
-#&gt; 
-#&gt; variable.annotations:
-#&gt; data frame with 0 columns and 0 rows
-#&gt; </div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>convertListTocompData</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>count.matrix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4000</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1000</span><span class='op'>)</span>,</span>
+<span class='r-in'>                           sample.annotations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                           info.parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, </span>
+<span class='r-in'>                           uID <span class='op'>=</span> <span class='st'>"123456"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> An object of class compData </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dataset name: mydata </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of samples: 4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of variables: 1000 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of random outliers: 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of single outliers: 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of known truly differentially expressed genes: 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> No differential expression analysis has been performed. </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> count.matrix:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3] [,4]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  949  405  624  780</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]  546  672   40   16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,]  256  716  455  321</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [4,]  868   12  274  595</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5,]  358  198  373  873</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [6,]  466  302  146  258</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + 994 rows...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample.annotations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   condition</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4         2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> variable.annotations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> data frame with 0 columns and 0 rows</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

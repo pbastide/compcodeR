@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>The main function for performing comparisons among differential expression methods and generating a report in HTML format. It is assumed that all differential expression results have been generated in advance (using e.g. the function <code><a href='runDiffExp.html'>runDiffExp</a></code>) and that the result <code>compData</code> object for each data set and each differential expression method is saved separately in files with the extension <code>.rds</code>. Note that the function can also be called via the <code><a href='runComparisonGUI.html'>runComparisonGUI</a></code> function, which lets the user set parameters and select input files using a graphical user interface.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>runComparison</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>runComparison</span><span class='op'>(</span>
   <span class='va'>file.table</span>,
   <span class='va'>parameters</span>,
   <span class='va'>output.directory</span>,
@@ -142,7 +142,7 @@
   out.width <span class='op'>=</span> <span class='cn'>NULL</span>,
   saveResultTable <span class='op'>=</span> <span class='cn'>FALSE</span>,
   knitResults <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -226,61 +226,69 @@
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, 
-                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, 
-                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"voom.limma"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"voom.limma.createRmd"</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, 
-           norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp6A2CC3/tempcode2057464f85d3.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
-#&gt;   ordinary text without R code
-#&gt; 
-#&gt;   |                                                                              |......................................................................| 100%
-#&gt; label: unnamed-chunk-1 (with options) 
-#&gt; List of 6
-#&gt;  $ echo   : logi TRUE
-#&gt;  $ eval   : logi TRUE
-#&gt;  $ include: logi TRUE
-#&gt;  $ message: logi FALSE
-#&gt;  $ error  : logi TRUE
-#&gt;  $ warning: logi TRUE
-#&gt; 
-#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp6A2CC3/tempcode2057464f85d3.md</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"edgeR.exact"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"edgeR.exact.createRmd"</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, 
-           norm.method <span class='op'>=</span> <span class='st'>"TMM"</span>, 
-           trend.method <span class='op'>=</span> <span class='st'>"movingave"</span>, disp.type <span class='op'>=</span> <span class='st'>"tagwise"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp6A2CC3/tempcode20574cd067b1.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%
-#&gt;   ordinary text without R code
-#&gt; 
-#&gt;   |                                                                              |......................................................................| 100%
-#&gt; label: unnamed-chunk-1 (with options) 
-#&gt; List of 6
-#&gt;  $ echo   : logi TRUE
-#&gt;  $ eval   : logi TRUE
-#&gt;  $ include: logi TRUE
-#&gt;  $ message: logi FALSE
-#&gt;  $ error  : logi TRUE
-#&gt;  $ warning: logi TRUE
-#&gt; 
-#&gt; </div><div class='output co'>#&gt; <span class='message'>output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp6A2CC3/tempcode20574cd067b1.md</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='va'>file.table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>input.files <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, 
-                         <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mydata_voom.limma.rds"</span>, <span class='st'>"mydata_edgeR.exact.rds"</span><span class='op'>)</span><span class='op'>)</span>, 
-                         stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='va'>parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>incl.nbr.samples <span class='op'>=</span> <span class='fl'>5</span>, incl.replicates <span class='op'>=</span> <span class='fl'>1</span>, incl.dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, 
-                   incl.de.methods <span class='op'>=</span> <span class='cn'>NULL</span>, 
-                   fdr.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, tpr.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, typeI.threshold <span class='op'>=</span> <span class='fl'>0.05</span>,
-                   ma.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, fdc.maxvar <span class='op'>=</span> <span class='fl'>1500</span>, overlap.threshold <span class='op'>=</span> <span class='fl'>0.05</span>,
-                   fracsign.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, mcc.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, 
-                   nbrtpfp.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, 
-                   comparisons <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"auc"</span>, <span class='st'>"fdr"</span>, <span class='st'>"tpr"</span>, <span class='st'>"ma"</span>, <span class='st'>"correlation"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>runComparison</span><span class='op'>(</span>file.table <span class='op'>=</span> <span class='va'>file.table</span>, parameters <span class='op'>=</span> <span class='va'>parameters</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, </span>
+<span class='r-in'>                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, </span>
+<span class='r-in'>                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"voom.limma"</span>, </span>
+<span class='r-in'>           Rmdfunction <span class='op'>=</span> <span class='st'>"voom.limma.createRmd"</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, </span>
+<span class='r-in'>           norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbnI36u/tempcode7a443b925cdc.Rmd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ordinary text without R code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |......................................................................| 100%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> label: unnamed-chunk-1 (with options) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ echo   : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ eval   : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ include: logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ message: logi FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ error  : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ warning: logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbnI36u/tempcode7a443b925cdc.md</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"edgeR.exact"</span>, </span>
+<span class='r-in'>           Rmdfunction <span class='op'>=</span> <span class='st'>"edgeR.exact.createRmd"</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, </span>
+<span class='r-in'>           norm.method <span class='op'>=</span> <span class='st'>"TMM"</span>, </span>
+<span class='r-in'>           trend.method <span class='op'>=</span> <span class='st'>"movingave"</span>, disp.type <span class='op'>=</span> <span class='st'>"tagwise"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> processing file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbnI36u/tempcode7a44259142d9.Rmd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |...................................                                   |  50%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ordinary text without R code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |......................................................................| 100%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> label: unnamed-chunk-1 (with options) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ echo   : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ eval   : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ include: logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ message: logi FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ error  : logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ warning: logi TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> output file: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbnI36u/tempcode7a44259142d9.md</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='va'>file.table</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>input.files <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, </span>
+<span class='r-in'>                         <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span><span class='op'>(</span><span class='st'>"mydata_voom.limma.rds"</span>, <span class='st'>"mydata_edgeR.exact.rds"</span><span class='op'>)</span><span class='op'>)</span>, </span>
+<span class='r-in'>                         stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>parameters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>incl.nbr.samples <span class='op'>=</span> <span class='fl'>5</span>, incl.replicates <span class='op'>=</span> <span class='fl'>1</span>, incl.dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, </span>
+<span class='r-in'>                   incl.de.methods <span class='op'>=</span> <span class='cn'>NULL</span>, </span>
+<span class='r-in'>                   fdr.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, tpr.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, typeI.threshold <span class='op'>=</span> <span class='fl'>0.05</span>,</span>
+<span class='r-in'>                   ma.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, fdc.maxvar <span class='op'>=</span> <span class='fl'>1500</span>, overlap.threshold <span class='op'>=</span> <span class='fl'>0.05</span>,</span>
+<span class='r-in'>                   fracsign.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, mcc.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, </span>
+<span class='r-in'>                   nbrtpfp.threshold <span class='op'>=</span> <span class='fl'>0.05</span>, </span>
+<span class='r-in'>                   comparisons <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/S4Vectors/man/Vector-class.html'>c</a></span><span class='op'>(</span><span class='st'>"auc"</span>, <span class='st'>"fdr"</span>, <span class='st'>"tpr"</span>, <span class='st'>"ma"</span>, <span class='st'>"correlation"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'>runComparison</span><span class='op'>(</span>file.table <span class='op'>=</span> <span class='va'>file.table</span>, parameters <span class='op'>=</span> <span class='va'>parameters</span>, output.directory <span class='op'>=</span> <span class='va'>tmpdir</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

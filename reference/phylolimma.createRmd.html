@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying a length normalisation and transformation followed by differential expression analysis with phylolimma. The code is written to a <code>.Rmd</code> file. This function is generally not called by the user, the main interface for performing differential expression analysis is the <code><a href='runDiffExp.html'>runDiffExp</a></code> function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>phylolimma.createRmd</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>phylolimma.createRmd</span><span class='op'>(</span>
   <span class='va'>data.path</span>,
   <span class='va'>result.path</span>,
   <span class='va'>codefile</span>,
@@ -147,7 +147,7 @@
   use_eBayes <span class='op'>=</span> <span class='cn'>TRUE</span>,
   trend <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,21 +220,23 @@ is used to normalize the counts, using the normalization specified by <code>leng
     <p>Charlotte Soneson, Paul Bastide, Mélina Gallopin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'>phylolimma</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, 
-                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, 
-                                    id.species <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>,
-                                    lengths.relmeans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1000</span><span class='op'>)</span>,
-                                    lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
-                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"length.limma"</span>, 
-           Rmdfunction <span class='op'>=</span> <span class='st'>"phylolimma.createRmd"</span>, 
-           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: phylolimma</span></div><div class='output co'>#&gt; <span class='warning'>Warning: there is no package called ‘phylolimma’</span></div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'>phylolimma</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mydata.obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='generateSyntheticData.html'>generateSyntheticData</a></span><span class='op'>(</span>dataset <span class='op'>=</span> <span class='st'>"mydata"</span>, n.vars <span class='op'>=</span> <span class='fl'>1000</span>, </span>
+<span class='r-in'>                                    samples.per.cond <span class='op'>=</span> <span class='fl'>5</span>, n.diffexp <span class='op'>=</span> <span class='fl'>100</span>, </span>
+<span class='r-in'>                                    id.species <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                    lengths.relmeans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1000</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                    lengths.dispersions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                    output.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='runDiffExp.html'>runDiffExp</a></span><span class='op'>(</span>data.file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"mydata.rds"</span><span class='op'>)</span>, result.extent <span class='op'>=</span> <span class='st'>"length.limma"</span>, </span>
+<span class='r-in'>           Rmdfunction <span class='op'>=</span> <span class='st'>"phylolimma.createRmd"</span>, </span>
+<span class='r-in'>           output.directory <span class='op'>=</span> <span class='va'>tmpdir</span>, norm.method <span class='op'>=</span> <span class='st'>"TMM"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: phylolimma</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>there is no package called ‘phylolimma’</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

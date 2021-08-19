@@ -58,9 +58,6 @@
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -83,13 +80,16 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phylocompcodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.27.3.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.29.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../articles/phylocompcodeR.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,7 +134,7 @@
     <p>Print a list of all <code>*.createRmd</code> functions that are available in the search path. These functions can be used together with the <code><a href='runDiffExp.html'>runDiffExp</a></code> function to perform differential expression analysis. Consult the help pages for the respective functions for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span></code></pre></div>
 
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
@@ -142,17 +142,18 @@
     <p>Charlotte Soneson</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "baySeq.createRmd"           "DESeq2.createRmd"          
-#&gt;  [3] "DESeq2.length.createRmd"    "DSS.createRmd"             
-#&gt;  [5] "EBSeq.createRmd"            "edgeR.exact.createRmd"     
-#&gt;  [7] "edgeR.GLM.createRmd"        "lengthNorm.limma.createRmd"
-#&gt;  [9] "logcpm.limma.createRmd"     "NBPSeq.createRmd"          
-#&gt; [11] "NOISeq.prenorm.createRmd"   "phylolimma.createRmd"      
-#&gt; [13] "phylolm.createRmd"          "sqrtcpm.limma.createRmd"   
-#&gt; [15] "TCC.createRmd"              "ttest.createRmd"           
-#&gt; [17] "voom.limma.createRmd"       "voom.ttest.createRmd"      </div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>listcreateRmd</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "DESeq2.createRmd"           "DESeq2.length.createRmd"   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3] "DSS.createRmd"              "EBSeq.createRmd"           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] "NBPSeq.createRmd"           "NOISeq.prenorm.createRmd"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "TCC.createRmd"              "baySeq.createRmd"          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "edgeR.GLM.createRmd"        "edgeR.exact.createRmd"     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [11] "lengthNorm.limma.createRmd" "logcpm.limma.createRmd"    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13] "phylolimma.createRmd"       "phylolm.createRmd"         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] "sqrtcpm.limma.createRmd"    "ttest.createRmd"           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [17] "voom.limma.createRmd"       "voom.ttest.createRmd"      </span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
