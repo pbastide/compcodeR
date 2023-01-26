@@ -20,7 +20,7 @@
 #' 
 #' @param dataset A name or identifier for the data set/simulation settings. 
 #' @param n.vars The initial number of genes in the simulated data set. Based on the filtering conditions (\code{filter.threshold.total} and \code{filter.threshold.mediancpm}), the number of genes in the final data set may be lower than this number. 
-#' @param samples.per.cond The number of samples in each of the two conditions.
+#' @param samples.per.cond The number of samples in each of the two conditions. Can be left missing if the \code{tree} is specified, along with an \code{id.condition} vector (see below). If specified, both groups have the same number of samples equal to \code{samples.per.cond}.
 #' @param n.diffexp The number of genes simulated to be differentially expressed between the two conditions.
 #' @param repl.id A replicate ID for the specific simulation instance. Useful for example when generating multiple count matrices with the same simulation settings. 
 #' @param seqdepth The base sequencing depth (total number of mapped reads). This number is multiplied by a value drawn uniformly between \code{minfact} and \code{maxfact} for each sample to generate data with different actual sequencing depths. 
@@ -38,12 +38,12 @@
 #' @param single.outlier.low.prob The fraction of 'single' outliers with unusually low counts.
 #' @param effect.size The strength of the differential expression, i.e., the effect size, between the two conditions. If this is a single number, the effect sizes will be obtained by simulating numbers from an exponential distribution (with rate 1) and adding the results to the \code{effect.size}. For genes that are upregulated in the second condition, the mean in the first condition is multiplied by the effect size. For genes that are downregulated in the second condition, the mean in the first condition is divided by the effect size. It is also possible to provide a vector of effect sizes (one for each gene), which will be used as provided. In this case, the \code{fraction.upregulated} and \code{n.diffexp} arguments will be ignored and the values will be derived from the \code{effect.size} vector.
 #' @param output.file If not \code{NULL}, the path to the file where the data object should be saved. The extension should be \code{.rds}, if not it will be changed.
-#' @param tree a dated phylogenetic tree of class \code{\link[ape]{phylo}} with `samples.per.cond * 2` species.
+#' @param tree a dated phylogenetic tree of class \code{\link[ape]{phylo}}. If \code{samples.per.cond} is specified, it must have `samples.per.cond * 2` species.
 #' @param prop.var.tree the proportion of the common variance explained by the tree for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 1.
 #' @param model.process the process to be used for phylogenetic simulations. One of "BM" or "OU", default to "BM".
 #' @param selection.strength if the process is "OU", the selection strength parameter.
-#' @param id.condition A named vector, indicating which species is in each condition. Default to first `samples.per.cond` species in condition `1` and others in condition `2`.
-#' @param id.species A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, 2*samples.per.cond)}, i.e. all the samples come from the same species.
+#' @param id.condition A named vector, indicating which sample is in each condition. If specified, this overrides the \code{samples.per.cond} parameter. For non-phylogenetic simulations, groups must be balanced. When \code{tree} is specified, then groups can be un-balanced. Default to first `samples.per.cond` samples in condition `1` and others in condition `2` (\code{samples.per.cond} must then be specified).
+#' @param id.species A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, n.samples)}, i.e. all the samples come from the same species.
 #' @param check.id.species Should the species vector be checked against the tree lengths (if provided) ? If TRUE, the function checks that all the samples that share a factor value in \code{id.species} that their distance on the tree is zero, i.e. that they are on the same tip of the tree. Default to TRUE.
 #' @param lengths.relmeans An optional vector of mean values to use in the simulation of lengths from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the mean length values are sampled from values estimated from the Stern & Crandall (2018) data set.
 #' @param lengths.dispersions An optional vector of dispersions to use in the simulation of data from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the dispersion length values are sampled from values estimated from the Stern & Crandall (2018) data set.
@@ -94,7 +94,7 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
                                   tree = NULL, prop.var.tree = 1.0,
                                   model.process = c("BM", "OU"), selection.strength = 0,
                                   id.condition = NULL,
-                                  id.species = as.factor(rep(1, 2 * samples.per.cond)),
+                                  id.species = NULL,
                                   check.id.species = TRUE,
                                   lengths.relmeans = NULL, lengths.dispersions = NULL, lengths.phylo = TRUE) {
   
@@ -114,12 +114,6 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     lengths.phylo <- FALSE
   }
   
-  
-  ## Check id.species
-  if (!is.factor(id.species)) warning("Vector 'id.species' must be a factor. Transforming.")
-  id.species <- as.factor(id.species)
-  levels(id.species) <- 1:length(levels(id.species))
-  
   if (use_tree) {
     ## Check package
     if (!requireNamespace("ape", quietly = TRUE)) {
@@ -130,8 +124,8 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
       stop("The `tree` must be of class `phylo` from package `ape`.")
     }
     ## Check that the tree has the right number of species
-    if (length(tree$tip.label) != samples.per.cond * 2) {
-      stop("The tree should have as many species as `samples.per.cond` times two.")
+    if (!missing(samples.per.cond) && length(tree$tip.label) != samples.per.cond * 2) {
+      stop("When `samples.per.cond` is specified, the tree should have as many species as `samples.per.cond` times two. For un-ballanced desings on trees, please see parameter `id.condition`.")
     }
     ## Check that the tree is ultrametric
     if (!ape::is.ultrametric(tree)) {
@@ -140,13 +134,22 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     
     ## Check Conditions
     if (!is.null(id.condition)) {
+      if ((length(unique(id.condition)) != 2) || !all(sort(unique(id.condition)) == c(1,2))) stop("`id.condition` must have exactly two groups, named `1` and `2`.")
       id.condition <- checkParamVector(id.condition, "id.condition", tree)
+      n.samples <- length(id.condition)
+      if (!missing(samples.per.cond)) message("As `id.condition` is specified, parameter `samples.per.cond` will be ignored.")
     } else {
       id.condition <- rep(c(1, 2), each = samples.per.cond)
       names(id.condition) <- tree$tip.label
+      n.samples <- samples.per.cond * 2
     }
     
     ## Check id species
+    if (is.null(id.species)) id.species <- as.factor(rep(1, n.samples))
+    if (!is.factor(id.species)) warning("Vector 'id.species' must be a factor. Transforming.")
+    id.species <- as.factor(id.species)
+    levels(id.species) <- seq_along(levels(id.species))
+    
     id.species <- checkSpecies(id.species, "id.species", tree, tol = 1e-10, check.id.species)
     
     ## Check that all genes are over-dispersed
@@ -168,12 +171,12 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
   } else {
     ## Check id.condition (non phylogenetic)
     if (!is.null(id.condition)) {
-      if (length(id.condition) != 2 * samples.per.cond) {
-        stop("Vector of conditions `id.condition` should have length `2*samples.per.cond`.")
-      }
+      if (length(id.condition) != 2 * samples.per.cond) stop("Vector of conditions `id.condition` should have length `2*samples.per.cond`.")
+      if ((length(unique(id.condition)) != 2) || !all(sort(unique(id.condition)) == c(1,2))) stop("`id.condition` must have exactly two groups, named `1` and `2`.")
     } else {
       id.condition <- rep(c(1, 2), each = samples.per.cond)
     }
+    n.samples <- samples.per.cond * 2
   }
 
   ## Checks lengths
@@ -270,7 +273,7 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
   }
 	
 	### Generate sequencing depths (nfacts * Nk)
-	nfacts <- stats::runif(2 * samples.per.cond, min = minfact, max = maxfact)
+	nfacts <- stats::runif(n.samples, min = minfact, max = maxfact)
 	seq.depths <- nfacts * seqdepth
 
 	### If not all genes are overdispersed, let some of them be Poisson distributed (dispersion = 0)
@@ -481,7 +484,8 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
 	                        'single.outlier.high.prob' = single.outlier.high.prob, 
 	                        'single.outlier.low.prob' = single.outlier.low.prob,
 	                        'effect.size' = effect.size, 
-	                        'samples.per.cond' = samples.per.cond, 
+	                        'samples.per.cond' = ifelse(missing(samples.per.cond), NA, samples.per.cond), 
+	                        'n.samples' = n.samples,
 	                        'repl.id' = repl.id, 'dataset' = dataset, 
 	                        'uID' = uID, 'seqdepth' = seqdepth, 
 	                        'minfact' = minfact, 'maxfact' = maxfact,
@@ -600,7 +604,7 @@ computeAval <- function(count.matrix, conditions) {
 #' @param nfact_length.S2 Matrix of length factors for condition 2.
 #' @param overdispersed Indices that are overdispersed.
 #' 
-#' @return Z a n.var times 2*samples.per.cond matrix with the simulated data.
+#' @return Z a n.var times n.samples matrix with the simulated data.
 #' 
 #' @keywords internal
 #' 

@@ -14,7 +14,7 @@ simulateDataPhylo(
 )
 }
 \arguments{
-\item{tree}{a dated phylogenetic tree of class \code{\link[ape]{phylo}} with `samples.per.cond * 2` species.}
+\item{tree}{a dated phylogenetic tree of class \code{\link[ape]{phylo}}. If \code{samples.per.cond} is specified, it must have `samples.per.cond * 2` species.}
 
 \item{prop.var.tree}{the proportion of the common variance explained by the tree for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 1.}
 

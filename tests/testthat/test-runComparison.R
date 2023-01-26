@@ -350,7 +350,8 @@ test_that("generateSyntheticData works - with lengths and phylo", {
       tree = tree,
       output.file = NULL
     ),
-    "The tree should have as many species as `samples.per.cond` times two")
+    "When `samples.per.cond` is specified, the tree should have as many species as `samples.per.cond` times two. For un-ballanced desings on trees, please see parameter `id.condition`.")
+
   expect_error(
     generateSyntheticData(
       dataset = "B_625_625", n.vars = 500, 
@@ -399,10 +400,58 @@ test_that("generateSyntheticData works - with lengths and phylo", {
   idsp <- as.factor(c("A", "A", "A", "B", "C", "C", "D", "D"))
   names(idsp) <- tree$tip.label
   
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      samples.per.cond = 3, n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = c(1, 1, 1, 1, 2, 2, 2, 2),
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "When `samples.per.cond` is specified, the tree should have as many species as `samples.per.cond` times two. For un-ballanced desings on trees, please see parameter `id.condition`.")
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = c(1, 1, 1, 1, 2, 2, 2),
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "`id.condition` should have the same length as the number of taxa in the tree.")
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = c(1, 1, 1, 1, 2, 2, 2, 3),
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "`id.condition` must have exactly two groups, named `1` and `2`.")
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = c(1, 1, 1, 1, 3, 3, 3, 3),
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "`id.condition` must have exactly two groups, named `1` and `2`.")
+  
   expect_warning(
     generateSyntheticData(
       dataset = "B_625_625", n.vars = 500, 
-      samples.per.cond = 4, n.diffexp = 50, 
+      n.diffexp = 50, 
       repl.id = 1,
       tree = tree,
       id.condition = c(1, 1, 1, 1, 2, 2, 2, 2),
@@ -413,6 +462,32 @@ test_that("generateSyntheticData works - with lengths and phylo", {
   
   idcond <- c(1, 1, 1, 1, 2, 2, 2, 2)
   names(idcond) <- tree$tip.label
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      samples.per.cond = 3,
+      n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = idcond,
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "When `samples.per.cond` is specified, the tree should have as many species as `samples.per.cond` times two. For un-ballanced desings on trees, please see parameter `id.condition`.")
+  
+  expect_message(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500, 
+      samples.per.cond = 4,
+      n.diffexp = 50, 
+      repl.id = 1,
+      tree = tree,
+      id.condition = idcond,
+      id.species =  idsp,
+      output.file = NULL
+    ),
+    "As `id.condition` is specified, parameter `samples.per.cond` will be ignored.")
   
   expect_error(
     generateSyntheticData(

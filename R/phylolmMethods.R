@@ -13,7 +13,7 @@
 getTree <- function(cdata) {
   if (is.null(phylo.tree(cdata)) || length(phylo.tree(cdata)) == 0) {
     message("There were no tree in the data object. Using a star tree of unit height in phylolm.")
-    ntaxa <- info.parameters(cdata)$samples.per.cond * 2
+    ntaxa <- info.parameters(cdata)$n.samples
     tree <- ape::stree(ntaxa, "star")
     tree$edge.length <- rep(1, nrow(tree$edge))
     tree$tip.label <- rownames(sample.annotations(cdata))

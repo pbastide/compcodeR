@@ -31,7 +31,7 @@ generateSyntheticData(
   model.process = c("BM", "OU"),
   selection.strength = 0,
   id.condition = NULL,
-  id.species = as.factor(rep(1, 2 * samples.per.cond)),
+  id.species = NULL,
   check.id.species = TRUE,
   lengths.relmeans = NULL,
   lengths.dispersions = NULL,
@@ -43,7 +43,7 @@ generateSyntheticData(
 
 \item{n.vars}{The initial number of genes in the simulated data set. Based on the filtering conditions (\code{filter.threshold.total} and \code{filter.threshold.mediancpm}), the number of genes in the final data set may be lower than this number.}
 
-\item{samples.per.cond}{The number of samples in each of the two conditions.}
+\item{samples.per.cond}{The number of samples in each of the two conditions. Can be left missing if the \code{tree} is specified, along with an \code{id.condition} vector (see below). If specified, both groups have the same number of samples equal to \code{samples.per.cond}.}
 
 \item{n.diffexp}{The number of genes simulated to be differentially expressed between the two conditions.}
 
@@ -79,7 +79,7 @@ generateSyntheticData(
 
 \item{output.file}{If not \code{NULL}, the path to the file where the data object should be saved. The extension should be \code{.rds}, if not it will be changed.}
 
-\item{tree}{a dated phylogenetic tree of class \code{\link[ape]{phylo}} with `samples.per.cond * 2` species.}
+\item{tree}{a dated phylogenetic tree of class \code{\link[ape]{phylo}}. If \code{samples.per.cond} is specified, it must have `samples.per.cond * 2` species.}
 
 \item{prop.var.tree}{the proportion of the common variance explained by the tree for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 1.}
 
@@ -87,9 +87,9 @@ generateSyntheticData(
 
 \item{selection.strength}{if the process is "OU", the selection strength parameter.}
 
-\item{id.condition}{A named vector, indicating which species is in each condition. Default to first `samples.per.cond` species in condition `1` and others in condition `2`.}
+\item{id.condition}{A named vector, indicating which sample is in each condition. If specified, this overrides the \code{samples.per.cond} parameter. For non-phylogenetic simulations, groups must be balanced. When \code{tree} is specified, then groups can be un-balanced. Default to first `samples.per.cond` samples in condition `1` and others in condition `2` (\code{samples.per.cond} must then be specified).}
 
-\item{id.species}{A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, 2*samples.per.cond)}, i.e. all the samples come from the same species.}
+\item{id.species}{A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, n.samples)}, i.e. all the samples come from the same species.}
 
 \item{check.id.species}{Should the species vector be checked against the tree lengths (if provided) ? If TRUE, the function checks that all the samples that share a factor value in \code{id.species} that their distance on the tree is zero, i.e. that they are on the same tip of the tree. Default to TRUE.}
 

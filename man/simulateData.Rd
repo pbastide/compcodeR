@@ -46,7 +46,7 @@ simulateData(
 \item{overdispersed}{Indices that are overdispersed.}
 }
 \value{
-Z a n.var times 2*samples.per.cond matrix with the simulated data.
+Z a n.var times n.samples matrix with the simulated data.
 }
 \description{
 Use the Poisson or Negative Binomial model to simulate the data.

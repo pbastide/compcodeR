@@ -278,6 +278,7 @@ setReplaceMethod("result.table", "compData",
 #' \itemize{
 #' \item \code{dataset}: an informative name or identifier of the data set (e.g., summarizing the simulation settings).
 #' \item \code{samples.per.cond}
+#' \item \code{n.samples}
 #' \item \code{n.diffexp} 
 #' \item \code{repl.id}
 #' \item \code{seqdepth}
