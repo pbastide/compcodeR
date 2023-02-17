@@ -177,7 +177,7 @@ phylolm_analysis <- function(dat, design_data, design_formula, tree, model, meas
 #' sample.annotations(mydata.obj)$test_reg <- rnorm(10, 0, 1)
 #' saveRDS(mydata.obj, file.path(tmpdir, "mydata.rds"))
 #' ## Diff Exp
-#' runDiffExp(data.file = file.path(tmpdir, "mydata.rds"), result.extent = "DESeq2", 
+#' runDiffExp(data.file = file.path(tmpdir, "mydata.rds"), result.extent = "phylolm", 
 #'            Rmdfunction = "phylolm.createRmd", 
 #'            output.directory = tmpdir,
 #'            norm.method = "TMM",
@@ -255,7 +255,7 @@ phylolm.createRmd <- function(data.path, result.path, codefile,
     paste("method.names(cdata) <- list('short.name' = 'phylolm', 'full.name' = '",
           paste('phylolm', packageVersion('limma'), packageVersion('phylolm'), '.', norm.method, '.',
                 model, '.',
-                ifelse(!is.null(measurement_error), 'me', 'nome'), '.',
+                ifelse(!is.null(measurement_error), 'me', 'none'), '.',
                 "lengthNorm.", length.normalization, '.',
                 "dataTrans.", data.transformation,
                 ifelse(!is.null(extra.design.covariates), paste0(".", paste(extra.design.covariates, collapse = ".")), ""),
@@ -332,4 +332,173 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
     writeLines("data.trans <- sqrt(data.norm)", codefile)
   }
   writeLines("rownames(data.trans) <- rownames(count.matrix(cdata))", codefile)
+}
+
+#' Generate a \code{.Rmd} file containing code to perform differential expression analysis with \code{\link[phylolimma]{phylolimma}}
+#' 
+#' A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying a length normalisation and transformation followed by differential expression analysis with phylolimma. The code is written to a \code{.Rmd} file. This function is generally not called by the user, the main interface for performing differential expression analysis is the \code{\link{runDiffExp}} function.
+#' 
+#' For more information about the methods and the interpretation of the parameters, see the \code{\link[phylolimma]{phylolimma}} package and the corresponding publications.
+#' 
+#' @inheritParams phylolm.createRmd
+#' @param use.eBayes boolean, whether to use \code{\link[limma]{eBayes}} to moderate the t.values. Default to TRUE.
+#' @param trend if \code{use.eBayes=TRUE}, should an intensity-trend be allowed for the prior variance? Default to \code{FALSE}.
+#' @param regularize.correlation Should the covariance structure be regularized to a consensus structure for all genes ? If \code{TRUE} (default), then a common tree structure is used for all genes. If \code{FALSE}, then each gene gets its own correlation structure.
+#' @param ... Further arguments to be passed to function \code{\link[phylolimma]{phylolimma}}.
+#' 
+#' @details 
+#' The \code{length.matrix} field of the \code{compData} object 
+#' is used to normalize the counts, using the normalization specified by \code{length.normalization}.
+#' 
+#' @export 
+#' @author Charlotte Soneson, Paul Bastide, Mélina Gallopin
+#' @return The function generates a \code{.Rmd} file containing the code for performing the differential expression analysis. This file can be executed using e.g. the \code{knitr} package.
+#' @references 
+#' Smyth GK (2005): Limma: linear models for microarray data. In: 'Bioinformatics and Computational Biology Solutions using R and Bioconductor'. R. Gentleman, V. Carey, S. Dudoit, R. Irizarry, W. Huber (eds), Springer, New York, pages 397-420
+#'
+#' Musser, JM, Wagner, GP. (2015): Character trees from transcriptome data: Origin and individuation of morphological characters and the so‐called “species signal”. J. Exp. Zool. (Mol. Dev. Evol.) 324B: 588– 604. 
+#' 
+#' @examples
+#' try(
+#' if (require(ape) && require(phylolimma)) {
+#' tmpdir <- normalizePath(tempdir(), winslash = "/")
+#' set.seed(20200317)
+#' tree <- rphylo(10, 0.1, 0)
+#' mydata.obj <- generateSyntheticData(dataset = "mydata", n.vars = 1000, 
+#'                                     samples.per.cond = 5, n.diffexp = 100, 
+#'                                     tree = tree,
+#'                                     id.species = 1:10,
+#'                                     lengths.relmeans = rpois(1000, 1000),
+#'                                     lengths.dispersions = rgamma(1000, 1, 1),
+#'                                     output.file = file.path(tmpdir, "mydata.rds"))
+#' ## Add covariates
+#' ## Model fitted is count.matrix ~ condition + test_factor + test_reg
+#' sample.annotations(mydata.obj)$test_factor <- factor(rep(1:2, each = 5))
+#' sample.annotations(mydata.obj)$test_reg <- rnorm(10, 0, 1)
+#' saveRDS(mydata.obj, file.path(tmpdir, "mydata.rds"))
+#' ## Diff Exp
+#' runDiffExp(data.file = file.path(tmpdir, "mydata.rds"), result.extent = "phylolimma", 
+#'            Rmdfunction = "phylolimma.createRmd", 
+#'            output.directory = tmpdir,
+#'            norm.method = "TMM",
+#'            extra.design.covariates = c("test_factor", "test_reg"),
+#'            length.normalization = "RPKM")
+#' })
+
+phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
+                                 model = "BM", measurement_error = TRUE,
+                                 extra.design.covariates = NULL,
+                                 length.normalization = "RPKM",
+                                 data.transformation = "log2",
+                                 use.eBayes = TRUE,
+                                 trend = FALSE,
+                                 regularize.correlation = TRUE,
+                                 ...) {
+  codefile <- file(codefile, open = 'w')
+  writeLines("###  phylolimma + length", codefile)
+  writeLines(paste("Data file: ", data.path, sep = ''), codefile)
+  writeLines(c("```{r, echo = TRUE, eval = TRUE, include = TRUE, message = FALSE, error = TRUE, warning = TRUE}",
+               "require(phylolimma)",
+               "require(edgeR)",
+               paste("cdata <- readRDS('", data.path, "')", sep = '')), codefile)
+  if (is.list(readRDS(data.path))) {
+    writeLines("cdata <- convertListTophyloCompData(cdata)", codefile)
+  }
+  writeLines(c("is.valid <- check_phyloCompData(cdata)",
+               "if (!(is.valid == TRUE)) stop('Not a valid phyloCompData object.')"),
+             codefile)
+  
+  ## Design for normalization
+  writeLines(c("", "# Design"),codefile)
+  if (is.null(extra.design.covariates)) {
+    writeLines(c(
+      "design_formula <- as.formula(~ condition)",
+      "design_data <- sample.annotations(cdata)[, 'condition', drop = FALSE]"),
+      codefile)
+  } else {
+    writeLines(c(
+      paste0("design_formula <- as.formula(paste(' ~ ', paste(c('", paste(extra.design.covariates, collapse = "', '"), "'), collapse= '+'), '+ condition'))"),
+      paste0("design_data <- sample.annotations(cdata)[, c('", paste(extra.design.covariates, collapse = "', '"), "', 'condition'), drop = FALSE]")),
+      codefile)
+  }
+  writeLines(c(
+    "design_data$condition <- factor(design_data$condition)",
+    "design <- model.matrix(design_formula, design_data)"),
+    codefile)
+  
+  writeNormalization_phylolimma(norm.method, length.normalization, data.transformation, codefile)
+  
+  ## Fit
+  writeLines(c("", "# Fit"), codefile)
+  extra_args <- eval(substitute(alist(...)))
+  extra_args <- sapply(extra_args, function(x) paste(" = ", x))
+  extra_args <- paste(names(extra_args), extra_args, collapse = ", ")
+  writeLines(c("tree <- getTree(cdata)"),codefile)
+  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, ",", extra_args, ")"),
+             codefile)
+  
+  if (use.eBayes) {
+    if (!trend) {
+      writeLines("length.fitbayes <- limma::eBayes(length.fitlimma)", codefile)
+    } else {
+      writeLines("length.fitbayes <- limma::eBayes(length.fitlimma, trend = TRUE)", codefile)
+    }
+    writeLines(c("length.pvalues <- length.fitbayes$p.value[, ncol(length.fitbayes$p.value)]",
+                 "length.logFC <- length.fitbayes$coefficients[, ncol(length.fitbayes$coefficients)]"),
+               codefile)
+  } else {
+    writeLines(c("length.t.values <- length.fitlimma$coef[, ncol(length.fitlimma$coef)] / length.fitlimma$stdev.unscaled[, ncol(length.fitlimma$stdev.unscaled)] / length.fitlimma$sigma",
+                 "length.pvalues <- 2 * pt(-abs(length.t.values), df = length.fitlimma$df.residual)",
+                 "length.logFC <- length.fitlimma$coefficients[, ncol(length.fitlimma$coefficients)]"),
+               codefile)
+  }
+  writeLines(c("length.adjpvalues <- p.adjust(length.pvalues, method = 'BH')",
+               "length.score <- 1 - length.pvalues",
+               "result.table <- data.frame('pvalue' = length.pvalues, 'adjpvalue' = length.adjpvalues, 'logFC' = length.logFC, 'score' = length.score)",
+               "rownames(result.table) <- rownames(count.matrix(cdata))",
+               "result.table(cdata) <- result.table",
+               "package.version(cdata) <- paste('phylolimma,', packageVersion('phylolimma'), ';', 'edgeR,', packageVersion('edgeR'))",
+               "analysis.date(cdata) <- date()",
+               paste("method.names(cdata) <- list('short.name' = 'phylolimma', 'full.name' = '",
+                     paste('phylolimma', packageVersion('phylolimma'), packageVersion('edgeR'), '.', norm.method, '.',
+                           model, '.',
+                           ifelse(!is.null(measurement_error), 'me', 'none'), '.',
+                           "lengthNorm.", length.normalization, '.',
+                           "dataTrans.", data.transformation, '.',
+                           "moderation.", ifelse(use.eBayes, 'eBayes', 'none'),
+                           ifelse(trend, '.with_trend', ".no_trend"),
+                           ifelse(regularize.correlation, '.regularized_correlation', ".nonregularized_correlation"),
+                           ifelse(!is.null(extra.design.covariates), paste0(".", paste(extra.design.covariates, collapse = ".")), ""),
+                           sep = ''),
+                     "')", sep = ''),
+               "is.valid <- check_compData_results(cdata)",
+               "if (!(is.valid == TRUE)) stop('Not a valid phyloCompData result object.')",
+               paste("saveRDS(cdata, '", result.path, "')", sep = "")),
+             codefile)  
+  writeLines("print(paste('Unique data set ID:', info.parameters(cdata)$uID))", codefile)
+  writeLines("sessionInfo()", codefile)
+  writeLines("```", codefile)
+  close(codefile)
+}
+
+#' @title Generate a \code{.Rmd} file containing code to normalize data.
+#' 
+#' @description This function uses \code{\link[phylolimma]{lengthNormalizeRNASeq}}.
+#' 
+#' @inheritParams writeNormalization
+#' 
+#' @keywords internal
+
+writeNormalization_phylolimma <- function(norm.method, length.normalization, data.transformation, codefile) {
+  writeLines(c("", "# Normalisation"),codefile)
+  length.normalization <- match.arg(length.normalization, c("RPKM", "TPM", "none"))
+  if (length.normalization == "none" || length.normalization == "RPKM") {
+    writeLines(paste("nf <- edgeR::calcNormFactors(count.matrix(cdata), method = '", norm.method, "')", sep = ''),
+               codefile)
+  } else if (length.normalization == "TPM") {
+    writeLines(paste("nf <- edgeR::calcNormFactors(count.matrix(cdata) / length.matrix(cdata), method = '", norm.method, "')", sep = ''),
+               codefile)
+  }
+  writeLines(paste0("data.trans <- phylolimma::lengthNormalizeRNASeq(count.matrix(cdata), length.matrix(cdata), normalisationFactor = nf, lengthNormalization = '", length.normalization, "', dataTransformation = '", data.transformation, "')"),
+             codefile)
 }

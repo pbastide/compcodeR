@@ -65,7 +65,11 @@ Suggests:
     tidytree,
     statmod,
     covr,
-    sva
+    sva,
+    phylolimma
+Remotes: 
+    pbastide/phylolimma,
+    lamho86/phylolm
 Enhances: rpanel, DSS
 License: GPL (>= 2)
 VignetteBuilder: knitr

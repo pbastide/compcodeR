@@ -1101,8 +1101,22 @@ test_that("runDiffExp works - with lengths", {
     length.normalization = "RPKM",
     data.transformation = "log2"
   )
+  # phylolimma
+  if (requireNamespace("phylolimma", quietly = TRUE)) {
+    runDiffExp(
+      data.file = normalizePath(file.path(tdir, "B_625_625_5spc_repl1.rds"), winslash = "/"), 
+      result.extent = "phylolimma",
+      Rmdfunction = "phylolimma.createRmd",
+      output.directory = tdir, norm.method = "TMM",
+      model = "BM", measurement_error = TRUE,
+      extra.design.covariates = NULL,
+      length.normalization = "RPKM",
+      data.transformation = "log2"
+    )
+    # generateCodeHTMLs(file.path(tdir, "B_625_625_5spc_repl1_phylolimma.rds"), here())
+  }
   
-  methods <- c("DESeq2.length", "lengthNorm.limma", "phylolm")
+  methods <- c("DESeq2.length", "lengthNorm.limma", "phylolm", "phylolimma")
   
   ## Test show() method
   m <- "lengthNorm.limma"
@@ -1113,7 +1127,7 @@ test_that("runDiffExp works - with lengths", {
   show(tmp)
   
   for (m in methods) {
-    if (m != "DESeq2.length" || requireNamespace("DESeq2", quietly = TRUE)) {
+    if (m != "DESeq2.length" || requireNamespace("DESeq2", quietly = TRUE) || m != "phylolimma" || requireNamespace("phylolimma", quietly = TRUE)) {
       tmp <- readRDS(normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), winslash = "/"))
       
       expect_is(tmp, "phyloCompData")
@@ -1132,7 +1146,7 @@ test_that("runDiffExp works - with lengths", {
   }
   
   for (m in methods) {
-    if (m != "DESeq2.length" || requireNamespace("DESeq2", quietly = TRUE)) {
+    if (m != "DESeq2.length" || requireNamespace("DESeq2", quietly = TRUE) || m != "phylolimma" || requireNamespace("phylolimma", quietly = TRUE)) {
       generateCodeHTMLs(
         normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), 
                       winslash = "/"), normalizePath(tdir)
@@ -1327,6 +1341,28 @@ test_that("runDiffExp works - phylo", {
     length.normalization = "TPM",
     data.transformation = "log2"
   )
+  if (requireNamespace("phylolimma", quietly = TRUE)) {
+    runDiffExp(
+      data.file = normalizePath(file.path(tdir, "B_625_625_5spc_repl1.rds"), winslash = "/"), 
+      result.extent = "phylolimma_cpm",
+      Rmdfunction = "phylolimma.createRmd",
+      output.directory = tdir, norm.method = "TMM",
+      model = "OUfixedRoot", measurement_error = TRUE,
+      extra.design.covariates = NULL,
+      length.normalization = "none",
+      data.transformation = "sqrt"
+    )
+    runDiffExp(
+      data.file = normalizePath(file.path(tdir, "B_625_625_5spc_repl1.rds"), winslash = "/"), 
+      result.extent = "phylolimma",
+      Rmdfunction = "phylolimma.createRmd",
+      output.directory = tdir, norm.method = "TMM",
+      model = "BM", measurement_error = TRUE,
+      extra.design.covariates = NULL,
+      length.normalization = "TPM",
+      data.transformation = "log2"
+    )
+  }
   
   # with extra factor
   tmp <- readRDS(normalizePath(file.path(tdir, "B_625_625_5spc_repl1.rds"), winslash = "/"))
@@ -1379,8 +1415,21 @@ test_that("runDiffExp works - phylo", {
     length.normalization = "TPM",
     data.transformation = "log2"
   )
+  if (requireNamespace("phylolimma", quietly = TRUE)) {
+    runDiffExp(
+      data.file = normalizePath(file.path(tdir, "B_625_625_5spc_repl1.rds"), winslash = "/"), 
+      result.extent = "phylolimma.factor",
+      Rmdfunction = "phylolimma.createRmd",
+      output.directory = tdir, norm.method = "TMM",
+      model = "BM", measurement_error = TRUE,
+      extra.design.covariates = c("test_reg", "test_fac"),
+      length.normalization = "TPM",
+      data.transformation = "log2"
+    )
+    # generateCodeHTMLs(file.path(tdir, "B_625_625_5spc_repl1_phylolimma.factor.rds"), here())
+  }
   
-  methods <- c("DESeq2.length", "DESeq2.length.factor", "lengthNorm.limma", "lengthNorm.limma.cor", "lengthNorm.limma.factor", "lengthNorm.sva.limma", "lengthNorm.sva.limma.factor", "phylolm.factor", "phylolm_cpm", "phylolm")
+  methods <- c("DESeq2.length", "DESeq2.length.factor", "lengthNorm.limma", "lengthNorm.limma.cor", "lengthNorm.limma.factor", "lengthNorm.sva.limma", "lengthNorm.sva.limma.factor", "phylolm.factor", "phylolm_cpm", "phylolm", "phylolimma.factor", "phylolimma_cpm", "phylolimma")
   
   ## Test show() method
   m <- "lengthNorm.limma"
@@ -1394,36 +1443,40 @@ test_that("runDiffExp works - phylo", {
     if (!(m %in% c("DESeq2.length", "DESeq2.length.factor")) || requireNamespace("DESeq2", quietly = TRUE)) {
       if (!(m %in% c("lengthNorm.limma.cor")) || requireNamespace("statmod", quietly = TRUE)) {
         if (!(m %in% c("lengthNorm.sva.limma", "lengthNorm.sva.limma.factor")) || requireNamespace("sva", quietly = TRUE)) {
-          tmp <- readRDS(normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), winslash = "/"))
-          
-          expect_is(tmp, "phyloCompData")
-          expect_is(result.table(tmp), "data.frame")
-          expect_equal(nrow(result.table(tmp)), 489)
-          expect_is(code(tmp), "character")
-          expect_is(analysis.date(tmp), "character")
-          expect_is(compcodeR:::package.version(tmp), "character")
-          expect_is(method.names(tmp), "list")
-          expect_named(method.names(tmp), c("short.name", "full.name"))
-          
-          tmp2 <- tmp; result.table(tmp2) <- result.table(tmp2)[1:10, ]; expect_equal(check_compData_results(tmp2), "result.table must have the same number of rows as count.matrix.")
-          tmp2 <- tmp; result.table(tmp2) <- data.frame(); expect_equal(check_compData_results(tmp2), "Object must contain a data frame named 'result.table'.")
-          tmp2 <- tmp; result.table(tmp2)$score <- NULL; expect_equal(check_compData_results(tmp2), "result.table must contain a column named 'score'.")
+          if (!(m %in% c("phylolimma.factor", "phylolimma_cpm", "phylolimma")) || requireNamespace("phylolimma", quietly = TRUE)) {
+            tmp <- readRDS(normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), winslash = "/"))
+            
+            expect_is(tmp, "phyloCompData")
+            expect_is(result.table(tmp), "data.frame")
+            expect_equal(nrow(result.table(tmp)), 489)
+            expect_is(code(tmp), "character")
+            expect_is(analysis.date(tmp), "character")
+            expect_is(compcodeR:::package.version(tmp), "character")
+            expect_is(method.names(tmp), "list")
+            expect_named(method.names(tmp), c("short.name", "full.name"))
+            
+            tmp2 <- tmp; result.table(tmp2) <- result.table(tmp2)[1:10, ]; expect_equal(check_compData_results(tmp2), "result.table must have the same number of rows as count.matrix.")
+            tmp2 <- tmp; result.table(tmp2) <- data.frame(); expect_equal(check_compData_results(tmp2), "Object must contain a data frame named 'result.table'.")
+            tmp2 <- tmp; result.table(tmp2)$score <- NULL; expect_equal(check_compData_results(tmp2), "result.table must contain a column named 'score'.")
+          }
         }
       }
     }
   }
-  
+    
   for (m in methods) {
     if (!(m %in% c("DESeq2.length", "DESeq2.length.factor")) || requireNamespace("DESeq2", quietly = TRUE)) {
       if (!(m %in% c("lengthNorm.limma.cor")) || requireNamespace("statmod", quietly = TRUE)) {
         if (!(m %in% c("lengthNorm.sva.limma", "lengthNorm.sva.limma.factor")) || requireNamespace("sva", quietly = TRUE)) {
-          generateCodeHTMLs(
-            normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), 
-                          winslash = "/"), normalizePath(tdir)
-          )
-          expect_true(file.exists(normalizePath(file.path(
-            tdir, paste0("B_625_625_5spc_repl1_", 
-                         m, "_code.html")), winslash = "/")))
+          if (!(m %in% c("phylolimma.factor", "phylolimma_cpm", "phylolimma")) || requireNamespace("phylolimma", quietly = TRUE)) {
+            generateCodeHTMLs(
+              normalizePath(file.path(tdir, paste0("B_625_625_5spc_repl1_", m, ".rds")), 
+                            winslash = "/"), normalizePath(tdir)
+            )
+            expect_true(file.exists(normalizePath(file.path(
+              tdir, paste0("B_625_625_5spc_repl1_", 
+                           m, "_code.html")), winslash = "/")))
+          }
         }
       }
     }
@@ -1432,7 +1485,7 @@ test_that("runDiffExp works - phylo", {
   ## Comparison report
   file.table <- data.frame(input.files = normalizePath(file.path(
     tdir, paste0("B_625_625_5spc_repl1_", 
-                 methods[!(methods %in% c("DESeq2.length", "DESeq2.length.factor", "lengthNorm.limma.cor", "lengthNorm.sva.limma", "lengthNorm.sva.limma.factor"))],
+                 methods[!(methods %in% c("DESeq2.length", "DESeq2.length.factor", "lengthNorm.limma.cor", "lengthNorm.sva.limma", "lengthNorm.sva.limma.factor", "phylolimma.factor", "phylolimma_cpm", "phylolimma"))],
                  ".rds")), winslash = "/"))
   parameters <- NULL
   
@@ -1442,7 +1495,7 @@ test_that("runDiffExp works - phylo", {
   resTable <- readRDS(ff[length(ff)])
   expect_equal(resTable$fp + resTable$tp + resTable$fn + resTable$tn, rep(489, nrow(resTable)))
   expect_equal(ncol(resTable), 14)
-  expect_equal(nrow(resTable), length(methods) - 5)
+  expect_equal(nrow(resTable), length(methods) - 8)
   
   parameters <- list()
   par2 <- parameters; par2$incl.dataset <- "missing"
