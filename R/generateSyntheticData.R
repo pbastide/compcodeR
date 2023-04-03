@@ -260,10 +260,12 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
   } 
   if (!is.character(relmeans)) {
     if (length(relmeans) != n.vars) stop("The length of the relmeans vector must be the same as the number of simulated genes.")
+    if (anyNA(relmeans)) stop("The 'relmeans' parameter should not have any NA entries.")
     truemeans.S1 <- c(relmeans)
   }
   if (!is.character(dispersions)) {
     if (nrow(cbind(dispersions)) != n.vars) stop("The number of provided dispersions must be the same as the number of simulated genes.")
+    if (anyNA(dispersions)) stop("The 'dispersions' parameter should not have any NA entries.")
     truedispersions.S1 <- cbind(dispersions)[, 1]
     if (ncol(cbind(dispersions)) > 1) {
       truedispersions.S2 <- cbind(dispersions)[, 2]
