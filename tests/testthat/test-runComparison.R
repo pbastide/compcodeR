@@ -21,12 +21,30 @@ test_that("generateSyntheticData fails with wrong inputs", {
     output.file = file.path(tdir, "tmp.rds")
   ), "The length of the relmeans vector must be the same as the number of simulated genes.")
   
+  relmeansna <-  1:500
+  relmeansna[332] <- NA
+  expect_error(generateSyntheticData(
+    dataset = "B_625_625", n.vars = 500, 
+    samples.per.cond = 5, n.diffexp = 50, 
+    relmeans = relmeansna,
+    output.file = file.path(tdir, "tmp.rds")
+  ), "The 'relmeans' parameter should not have any NA entries.")
+  
   expect_error(generateSyntheticData(
     dataset = "B_625_625", n.vars = 500, 
     samples.per.cond = 5, n.diffexp = 50, 
     dispersions = 1:3,
     output.file = file.path(tdir, "tmp.rds")
   ), "The number of provided dispersions must be the same as the number of simulated genes.")
+  
+  dispna <-  1:500
+  dispna[345] <- NA
+  expect_error(generateSyntheticData(
+    dataset = "B_625_625", n.vars = 500, 
+    samples.per.cond = 5, n.diffexp = 50, 
+    dispersions = dispna,
+    output.file = file.path(tdir, "tmp.rds")
+  ), "The 'dispersions' parameter should not have any NA entries.")
 })
 
 test_that("compData object checks work", {

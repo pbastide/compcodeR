@@ -25,6 +25,47 @@ getTree <- function(cdata) {
   }
 }
 
+#' @importFrom stats quantile
+
+#' @title Get Bounds on alpha
+#'
+#' @description
+#' Return the tree of a \code{phyloCompData} object.
+#' If no tree, return a star tree with unit height, and throw a warning.
+#' 
+#' @param phy a phylogenetic tree.
+#' @param factor_up_alpha factor for up scalability
+#' @param factor_down_alpha factor for down scalability
+#' @param quantile_low_distance quantile for min distance
+#' 
+#' @details 
+#' If quantile_low_distance=0, then quantile(d_ij)=min(d_ij), and,
+#' for any two tips i,j, the correlation between i and j is bounded by exp(-factor_up_alpha/2).
+#' Those values of alpha will be used for the re-scaling of the tree,
+#' which has an exponential term in exp(2*alpha*h).
+#' The function makes sure that this number is below the maximal float allowed
+#' (equals to .Machine$double.xmax).
+#' 
+#' See function \code{find_grid_alpha} from package \code{PhylogeneticEM}.
+#' 
+#' @return a vector with lower and upper bounds for alpha
+#' 
+#' @keywords internal
+#' 
+getBounds <- function(phy,
+                      factor_up_alpha = 2, factor_down_alpha = 3, quantile_low_distance = 1e-04) {
+  dtips <- ape::cophenetic(phy)
+  d_min <- quantile(dtips[dtips > 0], quantile_low_distance)
+  h_tree <- ape::node.depth.edgelength(phy)[1]
+  alpha_min <- 1/(factor_down_alpha * h_tree)
+  alpha_max <- factor_up_alpha/(2 * d_min)
+  alpha_max_machine <- log(.Machine$double.xmax^0.975)/(2 * h_tree)
+  if (alpha_max > alpha_max_machine) {
+    alpha_max <- alpha_max_machine
+  }
+  return(c(alpha_min, alpha_max))
+}
+
 #' @title Extract phylolm results
 #'
 #' @description
@@ -71,31 +112,48 @@ extract_results_phylolm <- function(phylo_lm_obj) {
 #' 
 #' @keywords internal
 #' 
-phylolm_analysis <- function(dat, design_data, design_formula, tree, model, measurement_error, ...) {
+phylolm_analysis <- function (dat, design_data, design_formula, tree, model, measurement_error, 
+                              upper.bound, lower.bound, starting.value,
+                              ...) 
+{
   data_reg <- design_data
   data_reg$expr <- dat
   levels(data_reg$condition) <- c(1, 2)
-  res <- try(extract_results_phylolm(phylolm::phylolm(paste('expr', paste(as.character(design_formula), collapse = '')),
-                                                      data = data_reg,
-                                                      phy = tree,
-                                                      model = model,
-                                                      measurement_error = measurement_error, 
-                                                      ...)))
-  if (inherits(res, 'try-error')) {
-    if (model == 'BM' && measurement_error) {
-      res <- try(extract_results_phylolm(phylolm::phylolm(paste('expr', paste(as.character(design_formula), collapse = '')),
-                                                          data = data_reg,
-                                                          phy = tree,
-                                                          model = 'lambda',
-                                                          measurement_error = FALSE, 
-                                                          ...)))
+  res <- try(extract_results_phylolm(suppressWarnings(phylolm::phylolm(paste('expr', paste(as.character(design_formula), collapse = '')),
+                                                                       data = data_reg,
+                                                                       phy = tree,
+                                                                       model = model,
+                                                                       measurement_error = measurement_error, 
+                                                                       upper.bound = upper.bound,
+                                                                       starting.value = starting.value,
+                                                                       lower.bound = lower.bound,
+                                                                       ...))),
+             silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (model == "BM" && measurement_error) {
+      res <- try(extract_results_phylolm(phylolm::phylolm(paste("expr", 
+                                                                paste(as.character(design_formula), collapse = "")), 
+                                                          data = data_reg, phy = tree, model = "lambda", 
+                                                          measurement_error = FALSE, ...)),
+                 silent = TRUE)
+    } else {
+      ## More conservative bounds
+      h_tree <- max(ape::node.depth.edgelength(tree))
+      res <- try(extract_results_phylolm(suppressWarnings(phylolm::phylolm(paste('expr', paste(as.character(design_formula), collapse = '')),
+                                                                           data = data_reg,
+                                                                           phy = tree,
+                                                                           model = model,
+                                                                           measurement_error = measurement_error, 
+                                                                           upper.bound = list(alpha = log(2)/0.1/h_tree),
+                                                                           starting.value = list(alpha = log(2)/1/h_tree),
+                                                                           lower.bound = list(alpha = log(2)/10/h_tree),
+                                                                           ...))),
+                 silent = TRUE)
     }
   }
-  if (inherits(res, 'try-error')) {
-    res <- data.frame('pvalue' = 1.0,
-                      'logFC' = 0.0,
-                      'score' = 0.0)
-    warning(paste0('A gene produced an error.'))
+  if (inherits(res, "try-error")) {
+    res <- data.frame(pvalue = 1, logFC = 0, score = 0)
+    warning(paste0("A gene produced an error."))
   }
   return(res)
 }
@@ -238,8 +296,9 @@ phylolm.createRmd <- function(data.path, result.path, codefile,
   extra_args <- sapply(extra_args, function(x) paste(" = ", x))
   extra_args <- paste(names(extra_args), extra_args, collapse = ", ")
   writeLines(c("tree <- getTree(cdata)"),codefile)
+  writeLines(c("bound_alpha <- getBounds(tree)"),codefile)
   writeLines(c(
-    paste0("phylolm.results_list <- apply(data.trans, 1, phylolm_analysis, design_data = design_data, design_formula = design_formula, tree = tree, model = '", model, "', measurement_error = ", measurement_error, ", ", extra_args, ")"),
+    paste0("phylolm.results_list <- apply(data.trans, 1, phylolm_analysis, design_data = design_data, design_formula = design_formula, tree = tree, model = '", model, "', measurement_error = ", measurement_error, ", upper.bound = list(alpha = bound_alpha[2]), lower.bound = list(alpha = bound_alpha[1]), starting.value = list(alpha = mean(bound_alpha))", ", ", extra_args, ")"),
     "result.table <- do.call(rbind, phylolm.results_list)"),
     codefile)
   writeLines(c(

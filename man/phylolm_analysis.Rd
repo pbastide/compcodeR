@@ -11,6 +11,9 @@ phylolm_analysis(
   tree,
   model,
   measurement_error,
+  upper.bound,
+  lower.bound,
+  starting.value,
   ...
 )
 }
