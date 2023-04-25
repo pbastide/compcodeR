@@ -98,7 +98,7 @@ test_that("phyloCompData object checks work", {
   
   tmp <- generateSyntheticData(
     dataset = "B_625_625", n.vars = 50, 
-    samples.per.cond = 4, n.diffexp = 10,
+    n.diffexp = 10,
     tree = tree,
     id.species =  idsp,
     id.condition = idcond,
