@@ -70,9 +70,9 @@ Suggests:
     phylolimma,
     mvSLOUCH
 Remotes: 
-    pbastide/phylolimma,
-    lamho86/phylolm,
-    sandve-lab/evemodel
+    github::pbastide/phylolimma,
+    github::lamho86/phylolm,
+    gitlab::sandve-lab/evemodel
 Enhances: rpanel, DSS
 License: GPL (>= 2)
 VignetteBuilder: knitr

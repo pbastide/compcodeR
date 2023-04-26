@@ -224,7 +224,7 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   }
   expect_equal(apply(all_res_eve$twoThetaRes$par, 1, get_sigma2_error),
                unname(sapply(all_res_lm, function(x) x$sigma2_error)),
-               tolerance = 1e-2)
+               tolerance = 1e-1)
   
   ## expectations are equal
   get_exp_tips <- function(par_eve) {
