@@ -11,9 +11,9 @@ phylolm_analysis(
   tree,
   model,
   measurement_error,
-  upper.bound,
-  lower.bound,
-  starting.value,
+  upper.bound = NULL,
+  lower.bound = NULL,
+  starting.value = NULL,
   ...
 )
 }

@@ -45,6 +45,7 @@ Imports:
     utils,
     ape,
     phylolm,
+    evemodel,
     matrixStats,
     grDevices,
     graphics
@@ -66,10 +67,12 @@ Suggests:
     statmod,
     covr,
     sva,
-    phylolimma
+    phylolimma,
+    mvSLOUCH
 Remotes: 
     pbastide/phylolimma,
-    lamho86/phylolm
+    lamho86/phylolm,
+    sandve-lab/evemodel
 Enhances: rpanel, DSS
 License: GPL (>= 2)
 VignetteBuilder: knitr
