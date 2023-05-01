@@ -69,10 +69,11 @@ test_that("EVE vs phylolm comparisons", {
   res_lm <- as.data.frame(t(sapply(all_res_lm, extract_results_phylolm)))
 
   ## eve
+  colSpecies <- tree_dat$tip.label[sample.annotations(testdat)$id.species]
   all_res_eve <- evemodel::twoThetaTest(tree = tree_dat,
                                         gene.data = data.trans[1:100, ],
                                         isTheta2edge = theta2_edges,
-                                        colSpecies = tree_dat$tip.label[sample.annotations(testdat)$id.species])
+                                        colSpecies = colSpecies)
   
   res_eve <- data.frame(pvalue = pchisq(all_res_eve$LRT, df = 1, lower.tail = F))
   
@@ -125,6 +126,30 @@ test_that("EVE vs phylolm comparisons", {
   
   expect_equal(FD_lm, 0)
   expect_equal(FD_eve, 2)
+  expect_equal(TD_lm, 41)
+  expect_equal(TD_eve, 42)
+  
+  ## p value using null distribution
+  parEstim <- apply(all_res_eve$oneThetaRes$par, 2, median)
+  set.seed(1289)
+  nullData_1000genes <- evemodel::simOneTheta(n = 100,
+                                              tree = tree_dat,
+                                              colSpecies = colSpecies,
+                                              theta = parEstim["theta"], 
+                                              sigma2 = parEstim["sigma2"],
+                                              alpha = parEstim["alpha"],
+                                              beta = parEstim["beta"])
+  test.nullData_full <- evemodel::twoThetaTest(tree = tree_dat,
+                                               gene.data = nullData_1000genes,
+                                               isTheta2edge = theta2_edges,
+                                               colSpecies = colSpecies)
+  emp_cff <- ecdf(test.nullData_full$LRT)
+  res_eve_emp <- data.frame(pvalue = 1 - emp_cff(all_res_eve$LRT))
+  res_eve_emp$adjpvalue <- p.adjust(res_eve_emp$pvalue, 'BH')
+  FD_eve <- sum(res_eve_emp$adjpvalue[-(1:50)] <= 0.05)
+  TD_eve <- sum(res_eve_emp$adjpvalue[1:50] <= 0.05)
+  expect_equal(FD_eve, 0)
+  expect_equal(TD_eve, 10)
   
 })
 
@@ -203,10 +228,11 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   res_lm <- as.data.frame(t(sapply(all_res_lm, extract_results_phylolm)))
   
   ## eve
+  colSpecies <- tree_dat$tip.label[sample.annotations(testdat)$id.species]
   all_res_eve <- evemodel::twoThetaTest(tree = tree_dat,
                                         gene.data = data.trans[1:100, ],
                                         isTheta2edge = theta2_edges,
-                                        colSpecies = tree_dat$tip.label[sample.annotations(testdat)$id.species])
+                                        colSpecies = colSpecies)
   
   res_eve <- data.frame(pvalue = pchisq(all_res_eve$LRT, df = 1, lower.tail = F))
   
@@ -261,6 +287,29 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   expect_equal(TD_lm, 16)
   expect_equal(FD_eve, 0)
   expect_equal(TD_eve, 0)
+  
+  ## p value using null distribution
+  # parEstim <- colMeans(all_res_eve$oneThetaRes$par)
+  parEstim <- apply(all_res_eve$oneThetaRes$par, 2, median)
+  set.seed(1289)
+  nullData <- evemodel::simOneTheta(n = 100,
+                                    tree = tree_dat,
+                                    colSpecies = colSpecies,
+                                    theta = parEstim["theta"], 
+                                    sigma2 = parEstim["sigma2"],
+                                    alpha = parEstim["alpha"],
+                                    beta = parEstim["beta"])
+  test.nullData_full <- evemodel::twoThetaTest(tree = tree_dat,
+                                               gene.data = nullData,
+                                               isTheta2edge = theta2_edges,
+                                               colSpecies = colSpecies)
+  emp_cff <- ecdf(test.nullData_full$LRT)
+  res_eve_emp <- data.frame(pvalue = 1 - emp_cff(all_res_eve$LRT))
+  res_eve_emp$adjpvalue <- p.adjust(res_eve_emp$pvalue, 'BH')
+  FD_eve <- sum(res_eve_emp$adjpvalue[-(1:50)] <= 0.05)
+  TD_eve <- sum(res_eve_emp$adjpvalue[1:50] <= 0.05)
+  expect_equal(FD_eve, 0)
+  expect_equal(TD_eve, 1)
   
 })
 
@@ -352,6 +401,8 @@ test_that("evemodel runComparison", {
   generateCodeHTMLs(file.path(tdir, "test_phylolm.rds"), tdir)
   res_lm <- readRDS(file.path(tdir, "test_phylolm.rds"))
   expect_true(!anyNA(res_lm@result.table))
+  expect_equal(sum(res_lm@result.table$pvalue[1:50] <= 0.05), 47)
+  expect_equal(sum(res_lm@result.table$pvalue[51:100] <= 0.05), 6)
 
   ## eve
   runDiffExp(data.file = file.path(tdir, "test.rds"),
@@ -368,4 +419,24 @@ test_that("evemodel runComparison", {
   # FP <- sum(pos_test[-(1:50)])
   # TP <- sum(pos_test[1:50])
   # TPR <- TP / (FP + TP)
+  expect_equal(res_eve@method.names$full.name,
+               "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.FALSE")
+  
+  ## eve emp
+  runDiffExp(data.file = file.path(tdir, "test.rds"),
+             result.extent = "evemodel_emp", 
+             Rmdfunction = "evemodel.twoThetaTest.createRmd", 
+             output.directory = tdir,
+             norm.method = "TMM",
+             length.normalization = "TPM",
+             empirical.p.values = TRUE,
+             n.genes.null.dist = 100)
+  generateCodeHTMLs(file.path(tdir, "test_evemodel_emp.rds"), tdir)
+  res_eve_emp <- readRDS(file.path(tdir, "test_evemodel_emp.rds"))
+  expect_true(!anyNA(res_eve_emp@result.table))
+  expect_equal(dim(res_eve_emp@result.table), c(100, 4))
+  pos_test <- res_eve_emp@result.table$adjpvalue <= 0.05
+  expect_equal(sum(pos_test), 0)
+  expect_equal(res_eve_emp@method.names$full.name,
+               "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.TRUE.nGenesNull.100")
 })

@@ -11,6 +11,8 @@ evemodel.twoThetaTest.createRmd(
   norm.method,
   length.normalization = "RPKM",
   data.transformation = "log2",
+  empirical.p.values = FALSE,
+  n.genes.null.dist = 1000,
   ...
 )
 }
@@ -26,6 +28,10 @@ evemodel.twoThetaTest.createRmd(
 \item{length.normalization}{one of "none" (no correction), "TPM" or "RPKM" (default). See details.}
 
 \item{data.transformation}{one of "log2", "asin(sqrt)" or "sqrt". Data transformation to apply to the normalized data.}
+
+\item{empirical.p.values}{Boolean (default to FALSE). If TRUE, then an empirical null distribution is generated, using the parameters estimated from the oneThetaFits, and the \code{simOneTheta} function. See \code{evemodel} package vignette for more details.}
+
+\item{n.genes.null.dist}{if \code{empirical.p.values=TRUE}, the number of genes to simulate under the null distribution. Default to 1000.}
 
 \item{...}{Further arguments to be passed to function \code{\link[evemodel]{twoThetaTest}}.}
 }

@@ -146,6 +146,8 @@ getlogFCEVE <- function(twoThetaRes, isTheta2edge, tree_norep) {
 #' @param norm.method The between-sample normalization method used to compensate for varying library sizes and composition in the differential expression analysis. The normalization factors are calculated using the \code{calcNormFactors} of the \code{edgeR} package. Possible values are \code{"TMM"}, \code{"RLE"}, \code{"upperquartile"} and \code{"none"}
 #' @param length.normalization one of "none" (no correction), "TPM" or "RPKM" (default). See details.
 #' @param data.transformation one of "log2", "asin(sqrt)" or "sqrt". Data transformation to apply to the normalized data.
+#' @param empirical.p.values Boolean (default to FALSE). If TRUE, then an empirical null distribution is generated, using the parameters estimated from the oneThetaFits, and the \code{simOneTheta} function. See \code{evemodel} package vignette for more details.
+#' @param n.genes.null.dist if \code{empirical.p.values=TRUE}, the number of genes to simulate under the null distribution. Default to 1000.
 #' @param ... Further arguments to be passed to function \code{\link[evemodel]{twoThetaTest}}.
 #' 
 #' @details 
@@ -210,6 +212,8 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
                                             norm.method,
                                             length.normalization = "RPKM",
                                             data.transformation = "log2",
+                                            empirical.p.values = FALSE,
+                                            n.genes.null.dist = 1000,
                                             ...) {
   codefile <- file(codefile, open = 'w')
   writeLines("### evemodel twoThetaTest", codefile)
@@ -242,9 +246,20 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
   writeLines(
     paste0("evemodel.results_list <- evemodel::twoThetaTest(tree = tree_norep, gene.data = data.trans, isTheta2edge = theta_2_vec, colSpecies = col_species", extra_args, ")"),
     codefile)
-  writeLines(c(
-    "result.table <- data.frame(pvalue = pchisq(evemodel.results_list$LRT, df = 1, lower.tail = FALSE), logFC = getlogFCEVE(evemodel.results_list$twoThetaRes, theta_2_vec, tree_norep))"),
-    codefile)
+  if (empirical.p.values) {
+    writeLines(c(
+      "parEstim <- apply(evemodel.results_list$oneThetaRes$par, 2, median)",
+      "set.seed(1289)",
+      paste0("nullData <- simOneTheta(n = ", n.genes.null.dist, ", tree = tree_norep, colSpecies = col_species, theta = parEstim[\"theta\"], sigma2 = parEstim[\"sigma2\"], alpha = parEstim[\"alpha\"], beta = parEstim[\"beta\"])"),
+      "test.nullData_full <- twoThetaTest(tree = tree_norep, gene.data = nullData, isTheta2edge = theta_2_vec, colSpecies = col_species)",
+      "emp_cff <- ecdf(test.nullData_full$LRT)",
+      "result.table <- data.frame(pvalue = 1 - emp_cff(evemodel.results_list$LRT), logFC = getlogFCEVE(evemodel.results_list$twoThetaRes, theta_2_vec, tree_norep))"),
+      codefile)
+  } else {
+    writeLines(c(
+      "result.table <- data.frame(pvalue = pchisq(evemodel.results_list$LRT, df = 1, lower.tail = FALSE), logFC = getlogFCEVE(evemodel.results_list$twoThetaRes, theta_2_vec, tree_norep))"),
+      codefile)
+  }
   writeLines(c(
     "result.table$score <- 1 - result.table$pvalue",
     "result.table$adjpvalue <- p.adjust(result.table$pvalue, 'BH')"),
@@ -259,7 +274,9 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
     paste("method.names(cdata) <- list('short.name' = 'evetwotheta', 'full.name' = '",
           paste('evemodel', packageVersion('evemodel'), '.', norm.method, '.',
                 "lengthNorm.", length.normalization, '.',
-                "dataTrans.", data.transformation,
+                "dataTrans.", data.transformation, '.',
+                "empNull.", empirical.p.values,
+                ifelse(empirical.p.values, paste0(".nGenesNull.", n.genes.null.dist), ""),
                 sep = ''),
           "')", sep = ''),
     "is.valid <- check_compData_results(cdata)",
