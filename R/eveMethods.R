@@ -128,7 +128,9 @@ getlogFCEVE <- function(twoThetaRes, isTheta2edge, tree_norep) {
     alphas <- rep(par_eve["alpha"], nrow(tree_norep$edge))
     ee <- evemodel::expectedMeanOU(tree_norep, thetas, alphas, par_eve["theta1"])
     dd <- unique(ee[1:length(tree_norep)]) - par_eve["theta1"]
-    return(dd[which.max(abs(dd))])
+    ind <- which.max(abs(dd))
+    if (length(ind) == 0) return(NA) # Only NAs
+    return(dd[ind])
   }
   
   return(apply(twoThetaRes$par, 1, getDiffMeanTips))
