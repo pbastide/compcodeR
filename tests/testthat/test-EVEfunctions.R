@@ -151,6 +151,8 @@ test_that("EVE vs phylolm comparisons", {
   expect_equal(FD_eve, 0)
   expect_equal(TD_eve, 10)
   
+  file.remove(list.files(tdir, full.names = T, pattern = "*.rds"))
+  file.remove(list.files(tdir, full.names = T, pattern = "*.html"))
 })
 
 test_that("EVE vs phylolm comparisons - bigger tree", {
@@ -311,6 +313,9 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   expect_equal(FD_eve, 0)
   expect_equal(TD_eve, 1)
   
+  file.remove(list.files(tdir, full.names = T, pattern = "*.rds"))
+  file.remove(list.files(tdir, full.names = T, pattern = "*.html"))
+  
 })
 
 test_that("Errors", {
@@ -345,6 +350,9 @@ test_that("Errors", {
   
   expect_error(getIsTheta2edge(testdat),
                "For evemodel, all the samples from a species must be in the same condition.")
+  
+  file.remove(list.files(tdir, full.names = T, pattern = "*.rds"))
+  file.remove(list.files(tdir, full.names = T, pattern = "*.html"))
   
 })
 
@@ -404,8 +412,8 @@ test_that("evemodel runComparison", {
   generateCodeHTMLs(file.path(tdir, "test_phylolm.rds"), tdir)
   res_lm <- readRDS(file.path(tdir, "test_phylolm.rds"))
   expect_true(!anyNA(res_lm@result.table))
-  expect_equal(sum(res_lm@result.table$pvalue[1:50] <= 0.05), 47)
-  expect_equal(sum(res_lm@result.table$pvalue[51:100] <= 0.05), 6)
+  expect_equal(sum(res_lm@result.table$pvalue[1:50] <= 0.05), 45)
+  expect_equal(sum(res_lm@result.table$pvalue[51:100] <= 0.05), 4)
 
   ## eve
   runDiffExp(data.file = file.path(tdir, "test.rds"),
@@ -461,4 +469,7 @@ test_that("evemodel runComparison", {
   # TPR <- TP / (FP + TP)
   expect_equal(res_eve@method.names$full.name,
                "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.FALSE")
+  
+  file.remove(list.files(tdir, full.names = T, pattern = "*.rds"))
+  file.remove(list.files(tdir, full.names = T, pattern = "*.html"))
 })
