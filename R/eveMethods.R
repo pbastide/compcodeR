@@ -242,11 +242,11 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
   ## Apply analysis
   writeLines(c("", "# Analysis with EVE"),codefile)
   extra_args <- eval(substitute(alist(...)))
-  extra_args <- sapply(extra_args, function(x) paste(" = ", x))
+  extra_args <- lapply(extra_args, function(x) paste(" = ", deparse(x)))
   extra_args <- paste(names(extra_args), extra_args, collapse = ", ")
   if (length(extra_args) > 1) extra_args <- paste0(", ", extra_args)
   writeLines(
-    paste0("evemodel.results_list <- evemodel::twoThetaTest(tree = tree_norep, gene.data = data.trans, isTheta2edge = theta_2_vec, colSpecies = col_species", extra_args, ")"),
+    paste0("evemodel.results_list <- evemodel::twoThetaTest(tree = tree_norep, gene.data = data.trans, isTheta2edge = theta_2_vec, colSpecies = col_species, ", extra_args, ")"),
     codefile)
   if (empirical.p.values) {
     writeLines(c(

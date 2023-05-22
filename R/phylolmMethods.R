@@ -255,13 +255,17 @@ phylolm.createRmd <- function(data.path, result.path, codefile,
   ## Apply analysis
   writeLines(c("", "# Analysis"),codefile)
   extra_args <- eval(substitute(alist(...)))
-  extra_args <- sapply(extra_args, function(x) paste(" = ", x))
+  extra_args <- lapply(extra_args, function(x) paste(" = ", deparse(x)))
   extra_args <- paste(names(extra_args), extra_args, collapse = ", ")
   if (length(extra_args) > 1) extra_args <- paste0(", ", extra_args)
   writeLines(c("tree <- getTree(cdata)"), codefile)
-  writeLines(c("min_sigma2_error <- (.Machine$double.eps)^0.5 * max(ape::node.depth.edgelength(tree))"),codefile)
+  # writeLines(c("min_sigma2_error <- (.Machine$double.eps)^0.5 * max(ape::node.depth.edgelength(tree))"),codefile)
+  # writeLines(c(
+  #   paste0("phylolm.results_list <- apply(data.trans, 1, phylolm_analysis, design_data = design_data, design_formula = design_formula, tree = tree, model = '", model, "', measurement_error = ", measurement_error, ", lower.bound = list(sigma2_error = min_sigma2_error), upper.bound = list(lambda = 1 / (1 + min_sigma2_error))", extra_args, ")"),
+  #   "result.table <- do.call(rbind, phylolm.results_list)"),
+  #   codefile)
   writeLines(c(
-    paste0("phylolm.results_list <- apply(data.trans, 1, phylolm_analysis, design_data = design_data, design_formula = design_formula, tree = tree, model = '", model, "', measurement_error = ", measurement_error, ", lower.bound = list(sigma2_error = min_sigma2_error), upper.bound = list(lambda = 1 / (1 + min_sigma2_error))", extra_args, ")"),
+    paste0("phylolm.results_list <- apply(data.trans, 1, phylolm_analysis, design_data = design_data, design_formula = design_formula, tree = tree, model = '", model, "', measurement_error = ", measurement_error, ", ", extra_args, ")"),
     "result.table <- do.call(rbind, phylolm.results_list)"),
     codefile)
   writeLines(c(

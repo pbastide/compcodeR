@@ -390,6 +390,7 @@ test_that("evemodel runComparison", {
   )
   
   ## phylolm
+  min_sigma2_error <- (.Machine$double.eps)^0.5 * max(ape::node.depth.edgelength(tree))
   runDiffExp(data.file = file.path(tdir, "test.rds"),
              result.extent = "phylolm", 
              Rmdfunction = "phylolm.createRmd", 
@@ -397,7 +398,9 @@ test_that("evemodel runComparison", {
              measurement_error = TRUE,
              output.directory = tdir,
              norm.method = "TMM",
-             length.normalization = "TPM")
+             length.normalization = "TPM",
+             lower.bound = list(sigma2_error = min_sigma2_error),
+             upper.bound = list(lambda = 1 / (1 + min_sigma2_error)))
   generateCodeHTMLs(file.path(tdir, "test_phylolm.rds"), tdir)
   res_lm <- readRDS(file.path(tdir, "test_phylolm.rds"))
   expect_true(!anyNA(res_lm@result.table))
@@ -439,4 +442,23 @@ test_that("evemodel runComparison", {
   expect_equal(sum(pos_test), 0)
   expect_equal(res_eve_emp@method.names$full.name,
                "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.TRUE.nGenesNull.100")
+  
+  ## eve with upper bound
+  runDiffExp(data.file = file.path(tdir, "test.rds"),
+             result.extent = "evemodel", 
+             Rmdfunction = "evemodel.twoThetaTest.createRmd", 
+             output.directory = tdir,
+             norm.method = "TMM",
+             length.normalization = "TPM",
+             upperBound = c(theta = Inf, sigma2 = Inf, alpha = log(2) / 0.001 / 1))
+  generateCodeHTMLs(file.path(tdir, "test_evemodel.rds"), tdir)
+  res_eve <- readRDS(file.path(tdir, "test_evemodel.rds"))
+  expect_true(!anyNA(res_eve@result.table))
+  pos_test <- res_eve@result.table$adjpvalue <= 0.05
+  expect_equal(sum(pos_test), 0)
+  # FP <- sum(pos_test[-(1:50)])
+  # TP <- sum(pos_test[1:50])
+  # TPR <- TP / (FP + TP)
+  expect_equal(res_eve@method.names$full.name,
+               "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.FALSE")
 })
