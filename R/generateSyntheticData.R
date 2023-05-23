@@ -41,7 +41,7 @@
 #' @param tree a dated phylogenetic tree of class \code{\link[ape]{phylo}} with `samples.per.cond * 2` species.
 #' @param prop.var.tree the proportion of the common variance explained by the tree for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 1.
 #' @param model.process the process to be used for phylogenetic simulations. One of "BM" or "OU", default to "BM".
-#' @param selection.strength if the process is "OU", the selection strength parameter.
+#' @param selection.strength if the process is "OU", the selection strength parameter for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 0.
 #' @param id.condition A named vector, indicating which species is in each condition. Default to first `samples.per.cond` species in condition `1` and others in condition `2`.
 #' @param id.species A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, 2*samples.per.cond)}, i.e. all the samples come from the same species.
 #' @param check.id.species Should the species vector be checked against the tree lengths (if provided) ? If TRUE, the function checks that all the samples that share a factor value in \code{id.species} that their distance on the tree is zero, i.e. that they are on the same tip of the tree. Default to TRUE.
@@ -92,7 +92,7 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
                                   single.outlier.low.prob = 0, effect.size = 1.5, 
                                   output.file = NULL,
                                   tree = NULL, prop.var.tree = 1.0,
-                                  model.process = c("BM", "OU"), selection.strength = 0,
+                                  model.process = c("BM", "OU"), selection.strength = 0.0,
                                   id.condition = NULL,
                                   id.species = as.factor(rep(1, 2 * samples.per.cond)),
                                   check.id.species = TRUE,
@@ -163,6 +163,17 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     }
     if (any(prop.var.tree > 1.0 | prop.var.tree < 0.0)) {
       stop("All entries of `prop.var.tree` should be between 0 and 1.")
+    }
+    
+    ## Check Selection Strength
+    if (!is.vector(selection.strength)) {
+      stop("`selection.strength` should be a vector or a scalar.")
+    }
+    if (length(selection.strength) != n.vars) {
+      if (length(selection.strength) != 1) stop("`selection.strength` should be a vector of length the number of genes, or a scalar (in which case it will be recycled).")
+    }
+    if (any(selection.strength < 0.0)) {
+      stop("All entries of `selection.strength` should be non negative.")
     }
     
   } else {
@@ -485,10 +496,11 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
 	                        'repl.id' = repl.id, 'dataset' = dataset, 
 	                        'uID' = uID, 'seqdepth' = seqdepth, 
 	                        'minfact' = minfact, 'maxfact' = maxfact,
-	                        'nEff' = nEffNaive(tree, id.condition, model.process, selection.strength),
-	                        'nEffRatio' = nEffRatio(tree, id.condition, model.process, selection.strength))
+	                        'nEff' = nEffNaive(tree, id.condition, "BM", 0.0),
+	                        'nEffRatio' = nEffRatio(tree, id.condition, "BM", 0.0))
 	if (use_tree) {
 	  variable.annotations$prop.var.tree <- prop.var.tree
+	  variable.annotations$selection.strength <- selection.strength
 	  sample.annotations$id.condition <-  id.condition
 	}
 	if (use_lengths) {

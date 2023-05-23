@@ -85,7 +85,7 @@ generateSyntheticData(
 
 \item{model.process}{the process to be used for phylogenetic simulations. One of "BM" or "OU", default to "BM".}
 
-\item{selection.strength}{if the process is "OU", the selection strength parameter.}
+\item{selection.strength}{if the process is "OU", the selection strength parameter for each gene. It can be a scalar, in which case the same parameter is used for all genes. Otherwise it needs to be a vector with length \code{n.vars}. Default to 0.}
 
 \item{id.condition}{A named vector, indicating which species is in each condition. Default to first `samples.per.cond` species in condition `1` and others in condition `2`.}
 

@@ -48,13 +48,31 @@ simulatePhyloPoissonLogNormal <- function(tree, log_means, log_variance_phylo, l
   if (nrow(log_variance_sample) != P || length(log_variance_phylo) != P) {
     stop("`log_means` and `log_variance_sample should have as many rows as the length of `log_variance_phylo`.")
   }
+  if (!is.vector(selection.strength)) {
+    stop("`selection.strength` should be a vector or a scalar.")
+  }
+  if (length(selection.strength) != P) {
+    if (length(selection.strength) != 1) stop("`selection.strength` should be a vector of length the number of genes, or a scalar (in which case it will be recycled).")
+  }
+  if (any(selection.strength < 0.0)) {
+    stop("All entries of `selection.strength` should be non negative.")
+  }
   
   ## Phylogenetic simulation of log(lambda)
-  resids <- phylolm::rTrait(n = P,
-                            phy = tree,
-                            model = model.process,
-                            parameters = list(sigma2 = 1, ancestral.state = 0, optimal.value = 0, alpha = selection.strength),
-                            plot.tree = FALSE)
+  if (length(selection.strength) == 1) {
+    resids <- phylolm::rTrait(n = P,
+                              phy = tree,
+                              model = model.process,
+                              parameters = list(sigma2 = 1, ancestral.state = 0, optimal.value = 0, alpha = selection.strength),
+                              plot.tree = FALSE)
+  } else {
+    resids <- sapply(selection.strength,
+                     function(ss) phylolm::rTrait(n = 1,
+                                                  phy = tree,
+                                                  model = model.process,
+                                                  parameters = list(sigma2 = 1, ancestral.state = 0, optimal.value = 0, alpha = ss),
+                                                  plot.tree = FALSE))
+  }
   
   log_sd_phylo <- scale_variance_process(log_variance_phylo, tree, model.process, selection.strength)
   
@@ -330,7 +348,8 @@ simulateDataPhylo <- function(count_means,
 #' 
 scale_variance_process <- function(log_variance_phylo, tree, model.process, selection.strength) {
   fac <- get_model_factor(model.process, selection.strength, tree)
-  return(fac %*% t(sqrt(log_variance_phylo)))
+  if (model.process == "BM" || length(selection.strength) == 1) return(fac %*% t(sqrt(log_variance_phylo)))
+  return(fac %*% diag(sqrt(log_variance_phylo)))
 }
 
 #' @title Get the scaling factor
@@ -346,10 +365,14 @@ scale_variance_process <- function(log_variance_phylo, tree, model.process, sele
 #' 
 get_model_factor <- function(model.process, selection.strength, tree) {
   heights <- ape::node.depth.edgelength(tree)[1:length(tree$tip.label)]
-  if (model.process == "BM" || selection.strength == 0) {
+  if (model.process == "BM" || all(selection.strength == 0)) {
     return(sqrt(1 / heights))
   } else if (model.process == "OU") {
-    return(sqrt(1 / expm1(-2 * selection.strength * heights) * (-2 * selection.strength)))
+    tmpfun <- function(ss) {
+      if (ss == 0.0) return(sqrt(1 / heights))
+      return(sqrt(1 / expm1(-2 * ss * heights) * (-2 * ss)))
+    }
+    return(sapply(selection.strength, tmpfun))
   } else {
     stop("Process not yet implemented.")
   }
