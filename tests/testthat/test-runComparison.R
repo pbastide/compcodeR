@@ -481,6 +481,7 @@ test_that("generateSyntheticData works - with lengths and phylo", {
   idcond <- c(1, 1, 1, 1, 2, 2, 2, 2)
   names(idcond) <- tree$tip.label
   
+  ## prop var tree
   expect_error(
     generateSyntheticData(
       dataset = "B_625_625", n.vars = 500, 
@@ -555,6 +556,59 @@ test_that("generateSyntheticData works - with lengths and phylo", {
       id.condition = idcond,
       output.file = NULL,
       prop.var.tree = matrix(0.1, 10, 5)
+    ),
+    "should be a vector"
+  )
+  
+  ## selection strength
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50, 
+      samples.per.cond = 4, n.diffexp = 0,
+      tree = tree,
+      id.species =  idsp,
+      id.condition = idcond,
+      output.file = NULL,
+      selection.strength = c(0.1, 0.1)
+    ),
+    "should be a vector of length the number of genes"
+  )
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50, 
+      samples.per.cond = 4, n.diffexp = 0,
+      tree = tree,
+      id.species =  idsp,
+      id.condition = idcond,
+      output.file = NULL,
+      selection.strength = c(-1.1, rep(0.1, 48), 2)
+    ),
+    "All entries of `selection.strength` should be non negative"
+  )
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50, 
+      samples.per.cond = 4, n.diffexp = 0,
+      tree = tree,
+      id.species =  idsp,
+      id.condition = idcond,
+      output.file = NULL,
+      selection.strength = -1.1
+    ),
+    "All entries of `selection.strength` should be non negative"
+  )
+  
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50, 
+      samples.per.cond = 4, n.diffexp = 0,
+      tree = tree,
+      id.species =  idsp,
+      id.condition = idcond,
+      output.file = NULL,
+      selection.strength = matrix(0.1, 10, 5)
     ),
     "should be a vector"
   )
@@ -1257,7 +1311,7 @@ test_that("runDiffExp works - phylo", {
   expect_equal(ncol(sample.annotations(tmp)), 4)
   expect_is(variable.annotations(tmp), "data.frame")
   expect_equal(nrow(variable.annotations(tmp)), 489)
-  expect_equal(ncol(variable.annotations(tmp)), 23)
+  expect_equal(ncol(variable.annotations(tmp)), 24)
   expect_is(info.parameters(tmp), "list")
   expect_equal(info.parameters(tmp)$n.diffexp, 50)
   expect_equal(info.parameters(tmp)$dataset, "B_625_625")

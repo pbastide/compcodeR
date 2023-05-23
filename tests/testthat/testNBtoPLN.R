@@ -77,6 +77,15 @@ test_that("NB to PLN phylo - errors", {
   expect_warning(simulatePhyloPoissonLogNormal(tree, params_PLN$log_means[, c(2, 1, 3:8)], params_PLN$log_variance_phylo, params_PLN$log_variance_sample),
                "`log means` was not sorted in the correct order, when compared with the tips label. I am re-ordering it.")
   
+  expect_error(simulatePhyloPoissonLogNormal(tree, params_PLN$log_means, params_PLN$log_variance_phylo, params_PLN$log_variance_sample, model.process = "BM", selection.strength = -1),
+               "`selection.strength` should be non negative.")
+  
+  expect_error(simulatePhyloPoissonLogNormal(tree, params_PLN$log_means, params_PLN$log_variance_phylo, params_PLN$log_variance_sample, model.process = "BM", selection.strength = c(0.1, 0.2)),
+               "should be a vector of length the number of genes")
+  
+  expect_error(simulatePhyloPoissonLogNormal(tree, params_PLN$log_means, params_PLN$log_variance_phylo, params_PLN$log_variance_sample, model.process = "BM", selection.strength = matrix(0.1, 2, 2)),
+               "`selection.strength` should be a vector")
+  
   pplm <- params_PLN$log_means
   colnames(pplm) <- c("W", colnames(params_PLN$log_means[, 2:8]))
   expect_error(simulatePhyloPoissonLogNormal(tree, pplm, params_PLN$log_variance_phylo, params_PLN$log_variance_sample),
@@ -705,4 +714,98 @@ test_that("NB to PLN phylo - random tree - variable prop.var.tree", {
     }
   }
 
+})
+
+test_that("NB to PLN phylo - random tree - OU - Not Unit Length - With Rep - Uniform disp - varying alpha", {
+  skip_if_not_installed("phangorn")
+  skip_if_not_installed("phylolm")
+  
+  set.seed(18420318)
+  
+  ## Parameters
+  n <- 10000
+  ntaxa <- 10
+  selection.strength <- c(rep(0.0, n/2), rep(1.0, n/2))
+  
+  ## Tree
+  tree <- ape::rtree(ntaxa)
+  tree <- ape::compute.brlen(tree, runif, min = 0, max = 1)
+  tree <- phangorn::nnls.tree(ape::cophenetic.phylo(tree), tree, rooted = TRUE, trace = 0) # force ultrametric
+  tree_height <- ape::vcv(tree)[1, 1]
+  
+  ## Repetitions
+  r <- 2
+  ntaxa <- r * ntaxa
+  tree <- add_replicates(tree, r)
+  
+  ## NB
+  mean_nb <- 1:ntaxa * 100
+  dispersion_nb <- rep(1,ntaxa)/2 / 100
+  
+  sd_nb <- sqrt(mean_nb + dispersion_nb * mean_nb^2)
+  
+  sample_nb <- t(matrix(rnbinom(n = ntaxa * n,
+                                mu = mean_nb, 
+                                size = 1 / dispersion_nb), nrow = ntaxa))
+  
+  ## PLN
+  names(mean_nb) <- tree$tip.label
+  names(dispersion_nb) <- tree$tip.label
+  
+  prop.var.tree <- 0.6
+  
+  params_PLN <- get_poisson_log_normal_parameters(rep(1, n) %*% t(mean_nb), rep(1, n) %*% t(dispersion_nb), prop.var.tree)
+  
+  sample_ppln <- simulatePhyloPoissonLogNormal(tree,
+                                               params_PLN$log_means,
+                                               params_PLN$log_variance_phylo,
+                                               params_PLN$log_variance_sample,
+                                               model.process = "OU",
+                                               selection.strength = selection.strength)
+  
+  sample_ln <- sample_ppln$log_lambda
+  sample_pln <- sample_ppln$counts
+  rm(sample_ppln)
+  
+  mean_ln <- params_PLN$log_means[1, ]
+  sd_ln <- sqrt((params_PLN$log_variance_phylo + params_PLN$log_variance_sample)[1, ])
+  
+  ## Comparisons NB
+  expect_equivalent(colMeans(sample_nb), mean_nb, tolerance = 1e-2)
+  expect_equivalent(matrixStats::colSds(sample_nb), sd_nb, tolerance = 1e-2)
+  
+  ## Comparison log lambda
+  expect_equivalent(colMeans(sample_ln), mean_ln, tolerance = 1e-2)
+  expect_equivalent(matrixStats::colSds(sample_ln), sd_ln, tolerance = 1e-2)
+  
+  ## Comparisons PLN
+  expect_equivalent(colMeans(sample_pln), mean_nb, tolerance = 1e-2)
+  expect_equivalent(matrixStats::colSds(sample_pln), sd_nb, tolerance = 1e-2)
+  
+  ## Phylogenetic covariances - 0
+  C_tree <- ape::vcv(phylolm::transf.branch.lengths(tree, model = "BM", parameters = list(alpha = selection.strength[1]))$tree)
+  V_ln <- C_tree * params_PLN$log_variance_phylo[1] / tree_height + diag(params_PLN$log_variance_sample[1, ])
+  for (i in 1:(ntaxa-1)) {
+    for (j in (i+1):ntaxa) {
+      if (V_ln[i, j] != 0) {
+        expect_equivalent(cov(sample_ln[1:(n/2), i], sample_ln[1:(n/2), j]), V_ln[i, j], tolerance = 1e-3)
+      } else {
+        expect_equivalent(cov(sample_ln[1:(n/2), i], sample_ln[1:(n/2), j]), V_ln[i, j], tolerance = 1e-3)
+      }
+    }
+  }
+  
+  ## Phylogenetic covariances - 1
+  C_tree <- ape::vcv(phylolm::transf.branch.lengths(tree, model = "OUfixedRoot", parameters = list(alpha = selection.strength[n/2 + 1]))$tree)
+  V_ln <- C_tree * params_PLN$log_variance_phylo[1] / -expm1(-2 * selection.strength[n/2 + 1] * tree_height) + diag(params_PLN$log_variance_sample[1, ])
+  for (i in 1:(ntaxa-1)) {
+    for (j in (i+1):ntaxa) {
+      if (V_ln[i, j] != 0) {
+        expect_equivalent(cov(sample_ln[n/2 + 1:(n/2), i], sample_ln[n/2 + 1:(n/2), j]), V_ln[i, j], tolerance = 1e-3)
+      } else {
+        expect_equivalent(cov(sample_ln[n/2 + 1:(n/2), i], sample_ln[n/2 + 1:(n/2), j]), V_ln[i, j], tolerance = 1e-3)
+      }
+    }
+  }
+  
 })
