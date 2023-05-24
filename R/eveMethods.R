@@ -250,7 +250,7 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
     codefile)
   if (empirical.p.values) {
     writeLines(c(
-      "parEstim <- apply(evemodel.results_list$oneThetaRes$par, 2, median, na.rm = TRUE))",
+      "parEstim <- apply(evemodel.results_list$oneThetaRes$par, 2, median, na.rm = TRUE)",
       "set.seed(1289)",
       paste0("nullData <- simOneTheta(n = ", n.genes.null.dist, ", tree = tree_norep, colSpecies = col_species, theta = parEstim[\"theta\"], sigma2 = parEstim[\"sigma2\"], alpha = parEstim[\"alpha\"], beta = parEstim[\"beta\"])"),
       paste0("test.nullData_full <- twoThetaTest(tree = tree_norep, gene.data = nullData, isTheta2edge = theta_2_vec, colSpecies = col_species, ", extra_args, ")"),
