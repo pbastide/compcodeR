@@ -213,6 +213,10 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     if (length(lengths.relmeans) != n.vars) stop("The length of the 'lengths.relmeans' vector must be the same as the number of simulated genes.")
     if (length(lengths.dispersions) != n.vars) stop("The length of the 'lengths.dispersions' vector must be the same as the number of simulated genes.")
   }
+  if (any(lengths.relmeans == 0)) {
+    genes_zero <- which(lengths.relmeans == 0)
+    stop(paste0("In the `lengths.relmeans` vector, gene(s) number ", paste(genes_zero, collapse = ", "), " have a zero length expectation. Zero length genes are not allowed. Please change these values accordingly."))
+  }
   
 	## Define conditions
   condition <- id.condition
@@ -775,9 +779,9 @@ generateLengths <- function(id.species, lengths.relmeans, lengths.dispersions) {
         ntry <- ntry + 1
       }
       if (any(sims == 0)) {
-        warning(paste0("After 100 tries, could not generate non-zero lengths for gene ", i, ". Replacing zeros with the provided mean."))
-        sims[sims == 0] <- lengths.relmeans[i]
+        stop(paste0("After 100 tries, I could not generate non-zero lengths for gene ", i, ". Please check that the associated `lengths.relmeans` and `lengths.dispersions` values are adequate."))
       }
+      warning(paste0("I had to draw ", ntry, " random samples for gene ", i, " to get a non zero value. Please check that the associated `lengths.relmeans` and `lengths.dispersions` values are adequate."))
     }
     length_matrix[i, ] <- sims[id.species]
   }

@@ -409,6 +409,26 @@ generateLengthsPhylo <- function(tree, id.species, lengths.relmeans, lengths.dis
                                       params_simus$count_dispersions,
                                       tree = tree_sp, prop.var.tree = 1.0,
                                       model.process = "BM", selection.strength = 0) 
+  
+  for (i in seq_len(nrow(lengths_unique))) {
+    if (any(lengths_unique[i, ] == 0)) {
+      ntry <- 1
+      sims <- lengths_unique[i, ]
+      while (any(sims == 0) && ntry <= 100) {
+        sims <- simulateDataPhylo(params_simus$count_means[i, , drop = F],
+                                  params_simus$count_dispersions[i, , drop = F],
+                                  tree = tree_sp, prop.var.tree = 1.0,
+                                  model.process = "BM", selection.strength = 0) 
+        ntry <- ntry + 1
+      }
+      if (any(sims == 0)) {
+        stop(paste0("After 100 tries, I could not generate non-zero lengths for gene ", i, ". Please check that the associated `lengths.relmeans` and `lengths.dispersions` values are adequate."))
+      }
+      warning(paste0("I had to draw ", ntry, " random samples for gene ", i, " to get a non zero value. Please check that the associated `lengths.relmeans` and `lengths.dispersions` values are adequate."))
+      lengths_unique[i, ] <- sims
+    }
+  }
+  
   length_matrix <- lengths_unique[, id.species]
   return(length_matrix)
 }
