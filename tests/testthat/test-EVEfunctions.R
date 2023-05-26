@@ -230,7 +230,7 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   res_lm <- as.data.frame(t(sapply(all_res_lm, extract_results_phylolm)))
   
   ## eve
-  colSpecies <- tree_dat$tip.label[sample.annotations(testdat)$id.species]
+  colSpecies <- tree_dat$tip.label[cumsum(!duplicated(sample.annotations(testdat)$id.species))]
   all_res_eve <- evemodel::twoThetaTest(tree = tree_dat,
                                         gene.data = data.trans[1:100, ],
                                         isTheta2edge = theta2_edges,
@@ -244,7 +244,7 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   ## likelihoods are similar
   expect_equal(all_res_eve$twoThetaRes$ll,
                unname(sapply(all_res_lm, function(x) x$logLik)),
-               tolerance = 1e-1) 
+               tolerance = 1e-3) 
   
   ## sigma2_error are equal
   get_sigma2_error <- function(par_eve) {
@@ -252,7 +252,7 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   }
   expect_equal(apply(all_res_eve$twoThetaRes$par, 1, get_sigma2_error),
                unname(sapply(all_res_lm, function(x) x$sigma2_error)),
-               tolerance = 1e-1)
+               tolerance = 1e-2)
   
   ## expectations are equal
   get_exp_tips <- function(par_eve) {
@@ -266,16 +266,16 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   means_eve <- apply(all_res_eve$twoThetaRes$par, 1, get_exp_tips)
   means_lm <- unname(sapply(all_res_lm, function(x) unique(predict(x))))
   
-  expect_equal(means_eve, means_lm, tolerance = 1e-1)
+  expect_equal(means_eve, means_lm, tolerance = 1e-4)
   
   expect_equal(all_res_eve$twoThetaRes$par[, "theta1"],
                unname(sapply(all_res_lm, function(x) x$coefficients[1])),
-               tol = 1e-1)
+               tol = 1e-4)
   
   ## logFC are different
   res_eve$logFC <- getlogFCEVE(all_res_eve$twoThetaRes, theta2_edges, tree_dat)
   
-  expect_equal(res_eve$logFC, unname(unlist(res_lm$logFC)), tolerance = 1e0)
+  expect_equal(res_eve$logFC, unname(unlist(res_lm$logFC)), tolerance = 1e-2)
   
   ## p values
   res_eve$adjpvalue <- p.adjust(res_eve$pvalue, 'BH')
@@ -287,8 +287,8 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   
   expect_equal(FD_lm, 1)
   expect_equal(TD_lm, 16)
-  expect_equal(FD_eve, 0)
-  expect_equal(TD_eve, 0)
+  expect_equal(FD_eve, 1)
+  expect_equal(TD_eve, 15)
   
   ## p value using null distribution
   # parEstim <- colMeans(all_res_eve$oneThetaRes$par)
@@ -310,8 +310,8 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   res_eve_emp$adjpvalue <- p.adjust(res_eve_emp$pvalue, 'BH')
   FD_eve <- sum(res_eve_emp$adjpvalue[-(1:50)] <= 0.05)
   TD_eve <- sum(res_eve_emp$adjpvalue[1:50] <= 0.05)
-  expect_equal(FD_eve, 0)
-  expect_equal(TD_eve, 1)
+  expect_equal(FD_eve, 3)
+  expect_equal(TD_eve, 20)
   
   file.remove(list.files(tdir, full.names = T, pattern = "*.rds"))
   file.remove(list.files(tdir, full.names = T, pattern = "*.html"))
