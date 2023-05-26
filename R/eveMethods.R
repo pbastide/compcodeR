@@ -136,6 +136,23 @@ getlogFCEVE <- function(twoThetaRes, isTheta2edge, tree_norep) {
   return(apply(twoThetaRes$par, 1, getDiffMeanTips))
 }
 
+#' @title Columns indicators
+#' 
+#' @description
+#' Get the reference species for each column
+#' 
+#'
+#' @param cdata a \code{phyloCompData} object
+#' @param tree_norep a phylogenetic tree without replicates
+#'
+#' @return vector of names
+#'
+#' @keywords internal
+#'
+getColSpecies <- function(cdata, tree_norep) {
+  return(tree_norep$tip.label[cumsum(!duplicated(sample.annotations(cdata)$id.species))])
+}
+
 #' Generate a \code{.Rmd} file containing code to perform differential expression analysis with \code{\link[evemodel]{twoThetaTest}}.
 #' 
 #' A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) using the evemodel package. The code is written to a \code{.Rmd} file. This function is generally not called by the user, the main interface for performing differential expression analysis is the \code{\link{runDiffExp}} function.
@@ -236,7 +253,7 @@ evemodel.twoThetaTest.createRmd <- function(data.path, result.path, codefile,
   writeLines(c("tree_rep <- getTree(cdata)"), codefile)
   writeLines(c("tree_norep <- getTreeEVE(cdata)"), codefile)
   writeLines(c("theta_2_vec <- getIsTheta2edge(cdata, tree_norep)"), codefile)
-  writeLines(c("col_species <- tree_norep$tip.label[sample.annotations(cdata)$id.species]"), codefile)
+  writeLines(c("col_species <- getColSpecies(cdata, tree_norep)"), codefile)
   ## Normalization
   writeNormalization(norm.method, length.normalization, data.transformation, codefile)
   ## Apply analysis

@@ -426,7 +426,7 @@ test_that("evemodel runComparison", {
   res_eve <- readRDS(file.path(tdir, "test_evemodel.rds"))
   expect_true(!anyNA(res_eve@result.table))
   pos_test <- res_eve@result.table$adjpvalue <= 0.05
-  expect_equal(sum(pos_test), 0)
+  expect_equal(sum(pos_test), 50)
   # FP <- sum(pos_test[-(1:50)])
   # TP <- sum(pos_test[1:50])
   # TPR <- TP / (FP + TP)
@@ -447,7 +447,7 @@ test_that("evemodel runComparison", {
   expect_true(!anyNA(res_eve_emp@result.table))
   expect_equal(dim(res_eve_emp@result.table), c(100, 4))
   pos_test <- res_eve_emp@result.table$adjpvalue <= 0.05
-  expect_equal(sum(pos_test), 0)
+  expect_equal(sum(pos_test), 51)
   expect_equal(res_eve_emp@method.names$full.name,
                "evemodel0.0.0.9008.TMM.lengthNorm.TPM.dataTrans.log2.empNull.TRUE.nGenesNull.100")
   
@@ -463,7 +463,7 @@ test_that("evemodel runComparison", {
   res_eve <- readRDS(file.path(tdir, "test_evemodel.rds"))
   expect_true(!anyNA(res_eve@result.table))
   pos_test <- res_eve@result.table$adjpvalue <= 0.05
-  expect_equal(sum(pos_test), 0)
+  expect_equal(sum(pos_test), 50)
   # FP <- sum(pos_test[-(1:50)])
   # TP <- sum(pos_test[1:50])
   # TPR <- TP / (FP + TP)
