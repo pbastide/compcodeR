@@ -419,6 +419,7 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                                  use.eBayes = TRUE,
                                  trend = FALSE,
                                  regularize.correlation = TRUE,
+                                 ddf.method = "Species",
                                  ...) {
   codefile <- file(codefile, open = 'w')
   writeLines("###  phylolimma + length", codefile)
@@ -459,8 +460,11 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
   extra_args <- eval(substitute(alist(...)))
   extra_args <- sapply(extra_args, function(x) paste(" = ", x))
   extra_args <- paste(names(extra_args), extra_args, collapse = ", ")
+  extra_args_names <- eval(substitute(alist(...)))
+  extra_args_names <- sapply(extra_args_names, function(x) paste0("_", x))
+  extra_args_names <- paste0(names(extra_args_names), extra_args_names, collapse = ".")
   writeLines(c("tree <- getTree(cdata)"),codefile)
-  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, ",", extra_args, ")"),
+  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, ", ddf_method = \"", ddf.method, "\" ,", extra_args, ")"),
              codefile)
   
   if (use.eBayes) {
@@ -493,8 +497,10 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                            "dataTrans.", data.transformation, '.',
                            "moderation.", ifelse(use.eBayes, 'eBayes', 'none'),
                            ifelse(trend, '.with_trend', ".no_trend"),
-                           ifelse(regularize.correlation, '.regularized_correlation', ".nonregularized_correlation"),
+                           ifelse(regularize.correlation, '.regularized_correlation.', ".nonregularized_correlation."),
+                           "ddf.", ddf.method,
                            ifelse(!is.null(extra.design.covariates), paste0(".", paste(extra.design.covariates, collapse = ".")), ""),
+                           ifelse(!(extra_args_names == ""), paste0(".", extra_args_names), ""),
                            sep = ''),
                      "')", sep = ''),
                "is.valid <- check_compData_results(cdata)",
