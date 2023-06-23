@@ -429,7 +429,7 @@ generateLengthsPhylo <- function(tree, id.species, lengths.relmeans, lengths.dis
     }
   }
   
-  length_matrix <- lengths_unique[, id.species]
+  length_matrix <- lengths_unique[, match(id.species, colnames(lengths_unique))]
   return(length_matrix)
 }
 

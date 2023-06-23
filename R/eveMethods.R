@@ -93,7 +93,7 @@ getIsTheta2edge <- function(cdata, tree_norep = getTreeEVE(cdata)) {
     stop("Package 'mvSLOUCH' is needed for function 'getIsTheta2edge'.", call. = FALSE)
   }
   sample_annotations <- sample.annotations(cdata)
-  if (!all(sapply(split(sample_annotations, sample_annotations$id.species), function(x) length(unique(x$condition)) == 1))) {
+  if (!all(sapply(split(sample_annotations, sample_annotations$id.species), function(x) length(unique(x$condition)) <= 1))) {
     stop("For evemodel, all the samples from a species must be in the same condition.", call. = FALSE)
   }
   ## Parsimony reconstruction
