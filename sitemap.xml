@@ -46,9 +46,6 @@
     <loc>/reference/add_replicates.html</loc>
   </url>
   <url>
-    <loc>/reference/baySeq.createRmd.html</loc>
-  </url>
-  <url>
     <loc>/reference/checkDataObject.html</loc>
   </url>
   <url>
@@ -97,12 +94,6 @@
     <loc>/reference/convertphyloCompDataToList.html</loc>
   </url>
   <url>
-    <loc>/reference/deltaFisher.html</loc>
-  </url>
-  <url>
-    <loc>/reference/deltaStudent.html</loc>
-  </url>
-  <url>
     <loc>/reference/edgeR.GLM.createRmd.html</loc>
   </url>
   <url>
@@ -133,6 +124,9 @@
     <loc>/reference/getNegativeBinomialParameters.html</loc>
   </url>
   <url>
+    <loc>/reference/getTree.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_model_factor.html</loc>
   </url>
   <url>
@@ -143,6 +137,9 @@
   </url>
   <url>
     <loc>/reference/lengthNorm.limma.createRmd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lengthNorm.sva.limma.createRmd.html</loc>
   </url>
   <url>
     <loc>/reference/listcreateRmd.html</loc>
@@ -163,10 +160,7 @@
     <loc>/reference/phyloCompData.html</loc>
   </url>
   <url>
-    <loc>/reference/phyloCompDataBis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phylolimma.createRmd.html</loc>
+    <loc>/reference/phyloCompDataFromCompData.html</loc>
   </url>
   <url>
     <loc>/reference/phylolm.createRmd.html</loc>
@@ -175,16 +169,13 @@
     <loc>/reference/phylolm_analysis.html</loc>
   </url>
   <url>
-    <loc>/reference/phylolm_analysis_lengthAsPredictor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rpois_robust.html</loc>
-  </url>
-  <url>
     <loc>/reference/runComparison.html</loc>
   </url>
   <url>
     <loc>/reference/runComparisonGUI.html</loc>
+  </url>
+  <url>
+    <loc>/reference/runComparisonShiny.html</loc>
   </url>
   <url>
     <loc>/reference/runDiffExp.html</loc>
@@ -220,12 +211,6 @@
     <loc>/reference/ttest.createRmd.html</loc>
   </url>
   <url>
-    <loc>/reference/vanillaPowerStudent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vanillaPowerStudentInd.html</loc>
-  </url>
-  <url>
     <loc>/reference/voom.limma.createRmd.html</loc>
   </url>
   <url>
@@ -233,8 +218,5 @@
   </url>
   <url>
     <loc>/reference/writeNormalization.html</loc>
-  </url>
-  <url>
-    <loc>/reference/writeNormalization_phylolimma.html</loc>
   </url>
 </urlset>
