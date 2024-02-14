@@ -114,11 +114,6 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     lengths.phylo <- FALSE
   }
 
-  ## Check id.species
-  if (!is.factor(id.species)) warning("Vector 'id.species' must be a factor. Transforming.")
-  id.species <- as.factor(id.species)
-  levels(id.species) <- 1:length(levels(id.species))
-
   if (use_tree) {
     ## Check package
     if (!requireNamespace("ape", quietly = TRUE)) {
