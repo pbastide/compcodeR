@@ -33,9 +33,10 @@ generateSyntheticData(
   id.condition = NULL,
   id.species = NULL,
   check.id.species = TRUE,
-  lengths.relmeans = NULL,
-  lengths.dispersions = NULL,
-  lengths.phylo = TRUE
+  use.lengths = !is.null(tree),
+  lengths.relmeans = "auto",
+  lengths.dispersions = "auto",
+  lengths.phylo = !is.null(tree)
 )
 }
 \arguments{
@@ -93,11 +94,13 @@ generateSyntheticData(
 
 \item{check.id.species}{Should the species vector be checked against the tree lengths (if provided) ? If TRUE, the function checks that all the samples that share a factor value in \code{id.species} that their distance on the tree is zero, i.e. that they are on the same tip of the tree. Default to TRUE.}
 
-\item{lengths.relmeans}{An optional vector of mean values to use in the simulation of lengths from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the mean length values are sampled from values estimated from the Stern & Crandall (2018) data set.}
+\item{use.lengths}{If TRUE, the lengths are simulated and used for count data simulation. If TRUE, `lengths.relmeans` and `lengths.dispersions` are used. Default to TRUE if a tree is provided, and FALSE otherwise.}
 
-\item{lengths.dispersions}{An optional vector of dispersions to use in the simulation of data from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the dispersion length values are sampled from values estimated from the Stern & Crandall (2018) data set.}
+\item{lengths.relmeans}{An optional vector of mean values to use in the simulation of lengths from the Negative Binomial distribution. Only used if `use.lengths=TRUE`. Should be of length n.vars. Default to \code{"auto"}, the mean length values are sampled from values estimated from the Stern & Crandall (2018) data set.}
 
-\item{lengths.phylo}{If TRUE, the lengths are simulated according to a phylogenetic Poisson Log-Normal model on the tree, with a BM process. If FALSE, they are simulated according to an iid negative binomial distribution. In both cases, \code{lengths.relmeans} and \code{lengths.dispersions} are used. Default to TRUE if a tree is provided.}
+\item{lengths.dispersions}{An optional vector of dispersions to use in the simulation of data from the Negative Binomial distribution. Only used if `use.lengths=TRUE`. Should be of length n.vars. Default to \code{"auto"}, the dispersion length values are sampled from values estimated from the Stern & Crandall (2018) data set.}
+
+\item{lengths.phylo}{If TRUE, the lengths are simulated according to a phylogenetic Poisson Log-Normal model on the tree, with a BM process. If FALSE, they are simulated according to an iid negative binomial distribution. In both cases, \code{lengths.relmeans} and \code{lengths.dispersions} are used. Default to TRUE if a tree is provided, and FALSE otherwise.}
 }
 \value{
 A \code{\link{compData}} object. If \code{output.file} is not \code{NULL}, the object is saved in the given \code{output.file} (which should have an \code{.rds} extension).

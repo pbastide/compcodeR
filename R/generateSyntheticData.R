@@ -45,9 +45,10 @@
 #' @param id.condition A named vector, indicating which sample is in each condition. If specified, this overrides the \code{samples.per.cond} parameter. For non-phylogenetic simulations, groups must be balanced. When \code{tree} is specified, then groups can be un-balanced. Default to first `samples.per.cond` samples in condition `1` and others in condition `2` (\code{samples.per.cond} must then be specified).
 #' @param id.species A factor giving the species for each sample. If a tree is used, should be a named vector with names matching the taxa of the tree. Default to \code{rep(1, n.samples)}, i.e. all the samples come from the same species.
 #' @param check.id.species Should the species vector be checked against the tree lengths (if provided) ? If TRUE, the function checks that all the samples that share a factor value in \code{id.species} that their distance on the tree is zero, i.e. that they are on the same tip of the tree. Default to TRUE.
-#' @param lengths.relmeans An optional vector of mean values to use in the simulation of lengths from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the mean length values are sampled from values estimated from the Stern & Crandall (2018) data set.
-#' @param lengths.dispersions An optional vector of dispersions to use in the simulation of data from the Negative Binomial distribution. Should be of length n.vars. Default to \code{NULL}: the lengths are not taken into account for the simulation. If set to \code{"auto"}, the dispersion length values are sampled from values estimated from the Stern & Crandall (2018) data set.
-#' @param lengths.phylo If TRUE, the lengths are simulated according to a phylogenetic Poisson Log-Normal model on the tree, with a BM process. If FALSE, they are simulated according to an iid negative binomial distribution. In both cases, \code{lengths.relmeans} and \code{lengths.dispersions} are used. Default to TRUE if a tree is provided.
+#' @param use.lengths If TRUE, the lengths are simulated and used for count data simulation. If TRUE, `lengths.relmeans` and `lengths.dispersions` are used. Default to TRUE if a tree is provided, and FALSE otherwise.
+#' @param lengths.relmeans An optional vector of mean values to use in the simulation of lengths from the Negative Binomial distribution. Only used if `use.lengths=TRUE`. Should be of length n.vars. Default to \code{"auto"}, the mean length values are sampled from values estimated from the Stern & Crandall (2018) data set.
+#' @param lengths.dispersions An optional vector of dispersions to use in the simulation of data from the Negative Binomial distribution. Only used if `use.lengths=TRUE`. Should be of length n.vars. Default to \code{"auto"}, the dispersion length values are sampled from values estimated from the Stern & Crandall (2018) data set.
+#' @param lengths.phylo If TRUE, the lengths are simulated according to a phylogenetic Poisson Log-Normal model on the tree, with a BM process. If FALSE, they are simulated according to an iid negative binomial distribution. In both cases, \code{lengths.relmeans} and \code{lengths.dispersions} are used. Default to TRUE if a tree is provided, and FALSE otherwise.
 #'
 #' @return A \code{\link{compData}} object. If \code{output.file} is not \code{NULL}, the object is saved in the given \code{output.file} (which should have an \code{.rds} extension).
 #' @export
@@ -96,7 +97,7 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
                                   id.condition = NULL,
                                   id.species = NULL,
                                   check.id.species = TRUE,
-                                  lengths.relmeans = NULL, lengths.dispersions = NULL, lengths.phylo = TRUE) {
+                                  use.lengths = !is.null(tree), lengths.relmeans = "auto", lengths.dispersions = "auto", lengths.phylo = !is.null(tree)) {
 
   ## Check output file name
   if (!is.null(output.file)) {
@@ -114,6 +115,7 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
     lengths.phylo <- FALSE
   }
 
+  if (!use_tree && is.null(id.species)) id.species <- as.factor(rep(1, samples.per.cond * 2))
   if (use_tree) {
     ## Check package
     if (!requireNamespace("ape", quietly = TRUE)) {
@@ -192,9 +194,15 @@ generateSyntheticData <- function(dataset, n.vars, samples.per.cond, n.diffexp, 
 
   ## Checks lengths
   if (is.null(lengths.relmeans) != is.null(lengths.dispersions)) {
-    stop("For lengths to be used, both the 'lengths.relmeans' and 'lengths.dispersions' vectors must be provided.")
+    stop("For user-provided lengths to be used, both the 'lengths.relmeans' and 'lengths.dispersions' vectors must be provided. Otherwise leave both to 'auto'.")
   }
-  use_lengths <- !is.null(lengths.relmeans) # If lengths are specified, use them.
+  if (!(is.character(lengths.relmeans) || is.null(lengths.relmeans)) && !use.lengths) {
+    stop("Incompatible arguments: lengths are provided in 'lengths.relmeans', but 'use.lengths' is set to FALSE. For lengths to be used, please set 'use.lengths' to TRUE. Otherwise please remove the user provided lengths.")
+  }
+  if (is.null(lengths.relmeans) && use.lengths) {
+    stop("Incompatible arguments: 'use.lengths' is set to TRUE, but no 'lengths.relmeans' nor 'lengths.dispersions' are provided. If lengths are not used, please set 'use.lengths' to FALSE. Otherwise please add user provided lengths, or set 'lengths.relmeans' and 'lengths.dispersions' to 'auto'.")
+  }
+  use_lengths <- use.lengths # If lengths are specified, use them.
   if (use_lengths) {
     if (is.character(lengths.relmeans) || is.character(lengths.dispersions)) {  # if they are 'auto'
       ### Load mu and phi estimates from real data (Stern dataset)

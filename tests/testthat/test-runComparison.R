@@ -314,6 +314,47 @@ test_that("generateSyntheticData works - with lengths and phylo", {
       lengths.dispersions = rgamma(50, 1, 1),
       output.file = NULL
     ),
+    "Incompatible arguments")
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50,
+      samples.per.cond = 4, n.diffexp = 5,
+      repl.id = 1,
+      lengths.relmeans = NULL,
+      lengths.dispersions = NULL,
+      output.file = NULL,
+      use.lengths = TRUE
+    ),
+    "Incompatible arguments")
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50,
+      samples.per.cond = 4, n.diffexp = 5,
+      repl.id = 1,
+      lengths.relmeans = "auto",
+      lengths.dispersions = NULL,
+      output.file = NULL,
+      use.lengths = TRUE
+    ),
+    "For user-provided lengths")
+  expect_no_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50,
+      samples.per.cond = 4, n.diffexp = 5,
+      repl.id = 1,
+      output.file = NULL,
+      use.lengths = TRUE
+    ))
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 50,
+      samples.per.cond = 4, n.diffexp = 5,
+      repl.id = 1,
+      lengths.relmeans = rpois(40, 1e4),
+      lengths.dispersions = rgamma(50, 1, 1),
+      output.file = NULL,
+      use.lengths = TRUE
+    ),
     "The length of the 'lengths.relmeans' vector must be the same as the number of simulated genes.")
   expect_error(
     generateSyntheticData(
@@ -322,7 +363,8 @@ test_that("generateSyntheticData works - with lengths and phylo", {
       repl.id = 1,
       lengths.relmeans = rpois(50, 1e4),
       lengths.dispersions = rgamma(40, 1, 1),
-      output.file = NULL
+      output.file = NULL,
+      use.lengths = TRUE
     ),
     "The length of the 'lengths.dispersions' vector must be the same as the number of simulated genes.")
   expect_error(
@@ -331,9 +373,21 @@ test_that("generateSyntheticData works - with lengths and phylo", {
       samples.per.cond = 4, n.diffexp = 50,
       repl.id = 1,
       lengths.relmeans = rpois(50, 1e4),
-      output.file = NULL
+      output.file = NULL,
+      use.lengths = TRUE
     ),
-    "For lengths to be used, both the 'lengths.relmeans' and 'lengths.dispersions' vectors must be provided.")
+    "The length of the 'lengths.relmeans' vector must be the same as the number of simulated genes.")
+  expect_error(
+    generateSyntheticData(
+      dataset = "B_625_625", n.vars = 500,
+      samples.per.cond = 4, n.diffexp = 50,
+      repl.id = 1,
+      lengths.relmeans = rpois(50, 1e4),
+      lengths.dispersions = NULL,
+      output.file = NULL,
+      use.lengths = TRUE
+    ),
+    "For user-provided lengths to be used, both the 'lengths.relmeans' and 'lengths.dispersions' vectors must be provided.")
 
   ## Errors and warnings with tree
   expect_error(
@@ -618,6 +672,7 @@ test_that("generateSyntheticData works - with lengths and phylo", {
   tmp <- generateSyntheticData(
     dataset = "B_625_625", n.vars = 50,
     samples.per.cond = 4, n.diffexp = 0,
+    effect.size = 6,
     tree = tree,
     id.species =  idsp,
     id.condition = idcond,
@@ -1091,6 +1146,7 @@ test_that("runDiffExp works - with lengths", {
     id.species = factor(1:10),
     lengths.relmeans = rpois(500, 1e4),
     lengths.dispersions = rgamma(500, 1, 1),
+    use.lengths = TRUE,
     output.file = file.path(tdir, "B_625_625_5spc_repl1.rds")
   )
 

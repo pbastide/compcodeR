@@ -370,6 +370,9 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
 #' @param use.eBayes boolean, whether to use \code{\link[limma]{eBayes}} to moderate the t.values. Default to TRUE.
 #' @param trend if \code{use.eBayes=TRUE}, should an intensity-trend be allowed for the prior variance? Default to \code{FALSE}.
 #' @param regularize.correlation Should the covariance structure be regularized to a consensus structure for all genes ? If \code{TRUE} (default), then a common tree structure is used for all genes. If \code{FALSE}, then each gene gets its own correlation structure.
+#' @param ddf.method the method for the computation of the degrees of freedom of the t statistics (before moderation).
+#' Default to \code{ddf_method="Species"}: the number of species is taken for the
+#' computation of the degrees of freedom. See \code{\link[phylolimma]{phylolimma}}.
 #' @param ... Further arguments to be passed to function \code{\link[phylolimma]{phylolimma}}.
 #' 
 #' @details 

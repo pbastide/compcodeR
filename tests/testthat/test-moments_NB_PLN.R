@@ -68,7 +68,6 @@ test_that("Moments of the Negative Binomial and Log Normal are the same", {
   dataset <- "tree"
   us_tree_sim <- compcodeR::generateSyntheticData(dataset = dataset,
                                                   n.vars = n.vars,
-                                                  samples.per.cond = n / 2,
                                                   n.diffexp = 0,
                                                   repl.id = 1,
                                                   seqdepth = seqdepth,
@@ -92,7 +91,8 @@ test_that("Moments of the Negative Binomial and Log Normal are the same", {
                                                   id.species = id_species,
                                                   lengths.relmeans = NULL,
                                                   lengths.dispersions = NULL,
-                                                  lengths.phylo = FALSE
+                                                  lengths.phylo = FALSE,
+                                                  use.lengths = FALSE
   )
   
   
@@ -199,7 +199,6 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
   dataset <- "tree"
   us_tree_sim <- compcodeR::generateSyntheticData(dataset = dataset,
                                                   n.vars = n.vars,
-                                                  samples.per.cond = n / 2,
                                                   n.diffexp = n.diffexp,
                                                   repl.id = 1,
                                                   seqdepth = seqdepth,
@@ -223,7 +222,8 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
                                                   id.species = id_species,
                                                   lengths.relmeans = NULL,
                                                   lengths.dispersions = NULL,
-                                                  lengths.phylo = FALSE
+                                                  lengths.phylo = FALSE,
+                                                  use.lengths = FALSE
   )
   
   
@@ -353,7 +353,6 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, varying
   for (rep in 1:nrep) {
     us_tree_sim <- compcodeR::generateSyntheticData(dataset = dataset,
                                                     n.vars = n.vars,
-                                                    samples.per.cond = n / 2,
                                                     n.diffexp = n.diffexp,
                                                     repl.id = 1,
                                                     seqdepth = seqdepth,
@@ -379,7 +378,8 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, varying
                                                     id.species = id_species,
                                                     lengths.relmeans = NULL,
                                                     lengths.dispersions = NULL,
-                                                    lengths.phylo = FALSE
+                                                    lengths.phylo = FALSE,
+                                                    use.lengths = FALSE
     )
     count_tree[, , rep] <- us_tree_sim@count.matrix
   }
@@ -474,7 +474,6 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
   dataset <- "tree"
   us_tree_sim <- compcodeR::generateSyntheticData(dataset = dataset,
                                                   n.vars = n.vars,
-                                                  samples.per.cond = n / 2,
                                                   n.diffexp = n.diffexp,
                                                   repl.id = 1,
                                                   seqdepth = seqdepth,
@@ -498,7 +497,8 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
                                                   id.species = id_species,
                                                   lengths.relmeans = NULL,
                                                   lengths.dispersions = NULL,
-                                                  lengths.phylo = FALSE
+                                                  lengths.phylo = FALSE,
+                                                  use.lengths = FALSE
   )
   
   
@@ -604,7 +604,6 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
   dataset <- "tree"
   us_tree_sim <- compcodeR::generateSyntheticData(dataset = dataset,
                                                   n.vars = n.vars,
-                                                  samples.per.cond = n / 2,
                                                   n.diffexp = n.diffexp,
                                                   repl.id = 1,
                                                   seqdepth = seqdepth,
@@ -629,6 +628,7 @@ test_that("Moments of the Negative Binomial and Log Normal are the same, with sh
                                                   lengths.relmeans = NULL,
                                                   lengths.dispersions = NULL,
                                                   lengths.phylo = FALSE,
+                                                  use.lengths = FALSE,
                                                   prop.var.tree = runif(n.vars)
   )
   
