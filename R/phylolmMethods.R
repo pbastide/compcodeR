@@ -370,9 +370,6 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
 #' @param use.eBayes boolean, whether to use \code{\link[limma]{eBayes}} to moderate the t.values. Default to TRUE.
 #' @param trend if \code{use.eBayes=TRUE}, should an intensity-trend be allowed for the prior variance? Default to \code{FALSE}.
 #' @param regularize.correlation Should the covariance structure be regularized to a consensus structure for all genes ? If \code{TRUE} (default), then a common tree structure is used for all genes. If \code{FALSE}, then each gene gets its own correlation structure.
-#' @param ddf.method the method for the computation of the degrees of freedom of the t statistics (before moderation).
-#' Default to \code{ddf_method="Species"}: the number of species is taken for the
-#' computation of the degrees of freedom. See \code{\link[phylolimma]{phylolimma}}.
 #' @param ... Further arguments to be passed to function \code{\link[phylolimma]{phylolimma}}.
 #' 
 #' @details 
@@ -422,7 +419,6 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                                  use.eBayes = TRUE,
                                  trend = FALSE,
                                  regularize.correlation = TRUE,
-                                 ddf.method = "Species",
                                  ...) {
   codefile <- file(codefile, open = 'w')
   writeLines("###  phylolimma + length", codefile)
@@ -467,7 +463,7 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
   extra_args_names <- sapply(extra_args_names, function(x) paste0("_", x))
   extra_args_names <- paste0(names(extra_args_names), extra_args_names, collapse = ".")
   writeLines(c("tree <- getTree(cdata)"),codefile)
-  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, ", ddf_method = \"", ddf.method, "\" ,", extra_args, ")"),
+  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, " ,", extra_args, ")"),
              codefile)
   
   if (use.eBayes) {
@@ -501,7 +497,6 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                            "moderation.", ifelse(use.eBayes, 'eBayes', 'none'),
                            ifelse(trend, '.with_trend', ".no_trend"),
                            ifelse(regularize.correlation, '.regularized_correlation.', ".nonregularized_correlation."),
-                           "ddf.", ddf.method,
                            ifelse(!is.null(extra.design.covariates), paste0(".", paste(extra.design.covariates, collapse = ".")), ""),
                            ifelse(!(extra_args_names == ""), paste0(".", extra_args_names), ""),
                            sep = ''),

@@ -1552,8 +1552,7 @@ test_that("runDiffExp works - phylo", {
       model = "BM", measurement_error = TRUE,
       extra.design.covariates = c("test_reg", "test_fac"),
       length.normalization = "TPM",
-      data.transformation = "log2",
-      ddf.method = "Samples"
+      data.transformation = "log2"
     )
     # generateCodeHTMLs(file.path(tdir, "B_625_625_5spc_repl1_phylolimma.factor.rds"), here())
   }

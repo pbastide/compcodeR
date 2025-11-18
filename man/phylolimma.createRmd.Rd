@@ -17,7 +17,6 @@ phylolimma.createRmd(
   use.eBayes = TRUE,
   trend = FALSE,
   regularize.correlation = TRUE,
-  ddf.method = "Species",
   ...
 )
 }
@@ -45,10 +44,6 @@ phylolimma.createRmd(
 \item{trend}{if \code{use.eBayes=TRUE}, should an intensity-trend be allowed for the prior variance? Default to \code{FALSE}.}
 
 \item{regularize.correlation}{Should the covariance structure be regularized to a consensus structure for all genes ? If \code{TRUE} (default), then a common tree structure is used for all genes. If \code{FALSE}, then each gene gets its own correlation structure.}
-
-\item{ddf.method}{the method for the computation of the degrees of freedom of the t statistics (before moderation).
-Default to \code{ddf_method="Species"}: the number of species is taken for the
-computation of the degrees of freedom. See \code{\link[phylolimma]{phylolimma}}.}
 
 \item{...}{Further arguments to be passed to function \code{\link[phylolimma]{phylolimma}}.}
 }
