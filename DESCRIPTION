@@ -43,7 +43,7 @@ Imports:
     stats,
     utils,
     ape,
-    phylolm,
+    phylolm (>= 2.6.5),
     evemodel,
     matrixStats,
     grDevices,
@@ -72,7 +72,6 @@ Suggests:
     mvSLOUCH
 Remotes: 
     github::pbastide/phylolimma,
-    github::lamho86/phylolm,
     gitlab::sandve-lab/evemodel
 Enhances: rpanel, DSS
 License: GPL (>= 2)
