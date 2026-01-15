@@ -360,17 +360,17 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
   writeLines("rownames(data.trans) <- rownames(count.matrix(cdata))", codefile)
 }
 
-#' Generate a \code{.Rmd} file containing code to perform differential expression analysis with \code{\link[phylolimma]{phylolimma}}
+#' Generate a \code{.Rmd} file containing code to perform differential expression analysis with \code{\link[phyloDE]{phyloDE}}
 #' 
-#' A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying a length normalisation and transformation followed by differential expression analysis with phylolimma. The code is written to a \code{.Rmd} file. This function is generally not called by the user, the main interface for performing differential expression analysis is the \code{\link{runDiffExp}} function.
+#' A function to generate code that can be run to perform differential expression analysis of RNAseq data (comparing two conditions) by applying a length normalisation and transformation followed by differential expression analysis with phyloDE. The code is written to a \code{.Rmd} file. This function is generally not called by the user, the main interface for performing differential expression analysis is the \code{\link{runDiffExp}} function.
 #' 
-#' For more information about the methods and the interpretation of the parameters, see the \code{\link[phylolimma]{phylolimma}} package and the corresponding publications.
+#' For more information about the methods and the interpretation of the parameters, see the \code{\link[phyloDE]{phyloDE}} package and the corresponding publications.
 #' 
 #' @inheritParams phylolm.createRmd
 #' @param use.eBayes boolean, whether to use \code{\link[limma]{eBayes}} to moderate the t.values. Default to TRUE.
 #' @param trend if \code{use.eBayes=TRUE}, should an intensity-trend be allowed for the prior variance? Default to \code{FALSE}.
 #' @param regularize.correlation Should the covariance structure be regularized to a consensus structure for all genes ? If \code{TRUE} (default), then a common tree structure is used for all genes. If \code{FALSE}, then each gene gets its own correlation structure.
-#' @param ... Further arguments to be passed to function \code{\link[phylolimma]{phylolimma}}.
+#' @param ... Further arguments to be passed to function \code{\link[phyloDE]{phyloDE}}.
 #' 
 #' @details 
 #' The \code{length.matrix} field of the \code{compData} object 
@@ -386,7 +386,7 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
 #' 
 #' @examples
 #' try(
-#' if (require(ape) && require(phylolimma)) {
+#' if (require(ape) && require(phyloDE)) {
 #' tmpdir <- normalizePath(tempdir(), winslash = "/")
 #' set.seed(20200317)
 #' tree <- rphylo(10, 0.1, 0)
@@ -403,15 +403,15 @@ writeNormalization <- function(norm.method, length.normalization, data.transform
 #' sample.annotations(mydata.obj)$test_reg <- rnorm(10, 0, 1)
 #' saveRDS(mydata.obj, file.path(tmpdir, "mydata.rds"))
 #' ## Diff Exp
-#' runDiffExp(data.file = file.path(tmpdir, "mydata.rds"), result.extent = "phylolimma", 
-#'            Rmdfunction = "phylolimma.createRmd", 
+#' runDiffExp(data.file = file.path(tmpdir, "mydata.rds"), result.extent = "phyloDE", 
+#'            Rmdfunction = "phyloDE.createRmd", 
 #'            output.directory = tmpdir,
 #'            norm.method = "TMM",
 #'            extra.design.covariates = c("test_factor", "test_reg"),
 #'            length.normalization = "RPKM")
 #' })
 
-phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
+phyloDE.createRmd <- function(data.path, result.path, codefile, norm.method,
                                  model = "BM", measurement_error = TRUE,
                                  extra.design.covariates = NULL,
                                  length.normalization = "RPKM",
@@ -421,10 +421,10 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                                  regularize.correlation = TRUE,
                                  ...) {
   codefile <- file(codefile, open = 'w')
-  writeLines("###  phylolimma + length", codefile)
+  writeLines("###  phyloDE + length", codefile)
   writeLines(paste("Data file: ", data.path, sep = ''), codefile)
   writeLines(c("```{r, echo = TRUE, eval = TRUE, include = TRUE, message = FALSE, error = TRUE, warning = TRUE}",
-               "require(phylolimma)",
+               "require(phyloDE)",
                "require(edgeR)",
                paste("cdata <- readRDS('", data.path, "')", sep = '')), codefile)
   if (is.list(readRDS(data.path))) {
@@ -452,7 +452,7 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
     "design <- model.matrix(design_formula, design_data)"),
     codefile)
   
-  writeNormalization_phylolimma(norm.method, length.normalization, data.transformation, codefile)
+  writeNormalization_phyloDE(norm.method, length.normalization, data.transformation, codefile)
   
   ## Fit
   writeLines(c("", "# Fit"), codefile)
@@ -463,7 +463,7 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
   extra_args_names <- sapply(extra_args_names, function(x) paste0("_", x))
   extra_args_names <- paste0(names(extra_args_names), extra_args_names, collapse = ".")
   writeLines(c("tree <- getTree(cdata)"),codefile)
-  writeLines(paste0("length.fitlimma <- phylolimma::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, " ,", extra_args, ")"),
+  writeLines(paste0("length.fitlimma <- phyloDE::phylolmFit(data.trans, design = design, phy = tree, model = '", model, "', measurement_error = ", measurement_error, ", use_consensus = ", regularize.correlation, " ,", extra_args, ")"),
              codefile)
   
   if (use.eBayes) {
@@ -486,10 +486,10 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
                "result.table <- data.frame('pvalue' = length.pvalues, 'adjpvalue' = length.adjpvalues, 'logFC' = length.logFC, 'score' = length.score)",
                "rownames(result.table) <- rownames(count.matrix(cdata))",
                "result.table(cdata) <- result.table",
-               "package.version(cdata) <- paste('phylolimma,', packageVersion('phylolimma'), ';', 'edgeR,', packageVersion('edgeR'))",
+               "package.version(cdata) <- paste('phyloDE,', packageVersion('phyloDE'), ';', 'edgeR,', packageVersion('edgeR'))",
                "analysis.date(cdata) <- date()",
-               paste("method.names(cdata) <- list('short.name' = 'phylolimma', 'full.name' = '",
-                     paste('phylolimma', packageVersion('phylolimma'), packageVersion('edgeR'), '.', norm.method, '.',
+               paste("method.names(cdata) <- list('short.name' = 'phyloDE', 'full.name' = '",
+                     paste('phyloDE', packageVersion('phyloDE'), packageVersion('edgeR'), '.', norm.method, '.',
                            model, '.',
                            ifelse(!is.null(measurement_error), 'me', 'none'), '.',
                            "lengthNorm.", length.normalization, '.',
@@ -513,13 +513,13 @@ phylolimma.createRmd <- function(data.path, result.path, codefile, norm.method,
 
 #' @title Generate a \code{.Rmd} file containing code to normalize data.
 #' 
-#' @description This function uses \code{\link[phylolimma]{lengthNormalizeRNASeq}}.
+#' @description This function uses \code{\link[phyloDE]{lengthNormalizeRNASeq}}.
 #' 
 #' @inheritParams writeNormalization
 #' 
 #' @keywords internal
 
-writeNormalization_phylolimma <- function(norm.method, length.normalization, data.transformation, codefile) {
+writeNormalization_phyloDE <- function(norm.method, length.normalization, data.transformation, codefile) {
   writeLines(c("", "# Normalisation"),codefile)
   length.normalization <- match.arg(length.normalization, c("RPKM", "TPM", "none"))
   if (length.normalization == "none" || length.normalization == "RPKM") {
@@ -529,6 +529,6 @@ writeNormalization_phylolimma <- function(norm.method, length.normalization, dat
     writeLines(paste("nf <- edgeR::calcNormFactors(count.matrix(cdata) / length.matrix(cdata), method = '", norm.method, "')", sep = ''),
                codefile)
   }
-  writeLines(paste0("data.trans <- phylolimma::lengthNormalizeRNASeq(count.matrix(cdata), length.matrix(cdata), normalisationFactor = nf, lengthNormalization = '", length.normalization, "', dataTransformation = '", data.transformation, "')"),
+  writeLines(paste0("data.trans <- phyloDE::lengthNormalizeRNASeq(count.matrix(cdata), length.matrix(cdata), normalisationFactor = nf, lengthNormalization = '", length.normalization, "', dataTransformation = '", data.transformation, "')"),
              codefile)
 }

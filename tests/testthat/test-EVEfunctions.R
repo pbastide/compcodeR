@@ -50,11 +50,11 @@ test_that("EVE vs phylolm comparisons", {
   
   ## Data trans
   nf <- edgeR::calcNormFactors(count.matrix(testdat) / length.matrix(testdat), method = "TMM")
-  data.trans <- phylolimma::lengthNormalizeRNASeq(count.matrix(testdat),
-                                                  length.matrix(testdat),
-                                                  normalisationFactor = nf,
-                                                  lengthNormalization = "TPM",
-                                                  dataTransformation = "log2")
+  data.trans <- phyloDE::lengthNormalizeRNASeq(count.matrix(testdat),
+                                               length.matrix(testdat),
+                                               normalisationFactor = nf,
+                                               lengthNormalization = "TPM",
+                                               dataTransformation = "log2")
   
   ## phylolm
   min_sigma2_error <- (.Machine$double.eps)^0.5 * max(ape::node.depth.edgelength(tree_rep_dat))
@@ -211,11 +211,11 @@ test_that("EVE vs phylolm comparisons - bigger tree", {
   
   ## Data trans
   nf <- edgeR::calcNormFactors(count.matrix(testdat) / length.matrix(testdat), method = "TMM")
-  data.trans <- phylolimma::lengthNormalizeRNASeq(count.matrix(testdat),
-                                                  length.matrix(testdat),
-                                                  normalisationFactor = nf,
-                                                  lengthNormalization = "TPM",
-                                                  dataTransformation = "log2")
+  data.trans <- phyloDE::lengthNormalizeRNASeq(count.matrix(testdat),
+                                               length.matrix(testdat),
+                                               normalisationFactor = nf,
+                                               lengthNormalization = "TPM",
+                                               dataTransformation = "log2")
   
   ## phylolm
   min_sigma2_error <- (.Machine$double.eps)^0.5 * max(ape::node.depth.edgelength(tree_rep_dat))

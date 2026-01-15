@@ -68,10 +68,10 @@ Suggests:
     covr,
     sva,
     tcltk,
-    phylolimma,
+    phyloDE,
     mvSLOUCH
 Remotes: 
-    github::pbastide/phylolimma,
+    github::pbastide/phyloDE,
     gitlab::sandve-lab/evemodel
 Enhances: rpanel, DSS
 License: GPL (>= 2)
