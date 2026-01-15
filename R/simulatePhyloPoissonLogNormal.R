@@ -390,8 +390,6 @@ get_model_factor <- function(model.process, selection.strength, tree) {
 #' lengths from the Negative Binomial distribution.
 #' @param lengths.dispersions A vector or matrix of dispersions to use in the
 #' simulation of data from the Negative Binomial distribution.
-#' @param lengths.lambda A vector of heritability parameters to use in the
-#' simulation of data from the lambda model.
 #' 
 #' @return A matrix of the same size as 'length_matrix', with normalization
 #' factors to be applied for each sample and each gene.

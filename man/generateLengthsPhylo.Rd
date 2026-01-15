@@ -16,9 +16,6 @@ lengths from the Negative Binomial distribution.}
 
 \item{lengths.dispersions}{A vector or matrix of dispersions to use in the
 simulation of data from the Negative Binomial distribution.}
-
-\item{lengths.lambda}{A vector of heritability parameters to use in the
-simulation of data from the lambda model.}
 }
 \value{
 A matrix of the same size as 'length_matrix', with normalization

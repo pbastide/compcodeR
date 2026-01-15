@@ -3,7 +3,20 @@
 \docType{class}
 \name{phyloCompData-class}
 \alias{phyloCompData-class}
+\alias{phylo.tree}
+\alias{phylo.tree<-}
+\alias{length.matrix}
+\alias{length.matrix<-}
 \title{Class phyloCompData}
+\usage{
+phylo.tree(x)
+
+phylo.tree(x) <- value
+
+length.matrix(x)
+
+length.matrix(x) <- value
+}
 \description{
 The \code{phyloCompData} class extends the \code{\linkS4class{compData}} class
 with sequence length and phylogeny related information.

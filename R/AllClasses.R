@@ -534,20 +534,24 @@ setClass(
   validity = check_phyloCompData
 )
 
+#' @rdname phyloCompData-class
 setGeneric("phylo.tree", function(x) standardGeneric("phylo.tree"))
 setMethod("phylo.tree", "compData", function(x) NULL)
 setMethod("phylo.tree", "phyloCompData", function(x) x@tree)
 
+#' @rdname phyloCompData-class
 setGeneric("phylo.tree<-", function(x, value) standardGeneric("phylo.tree<-"))
 setReplaceMethod("phylo.tree", "compData",
                  function(x, value) {stop("There is no 'phylo.tree' slot in a 'compData' object. Please use a 'phyloCompData' object.")})
 setReplaceMethod("phylo.tree", "phyloCompData",
                  function(x, value) {x@tree <- value; check_phyloCompData(x); x})
 
+#' @rdname phyloCompData-class
 setGeneric("length.matrix", function(x) standardGeneric("length.matrix"))
 setMethod("length.matrix", "compData", function(x) NULL)
 setMethod("length.matrix", "phyloCompData", function(x) x@length.matrix)
 
+#' @rdname phyloCompData-class
 setGeneric("length.matrix<-", function(x, value) standardGeneric("length.matrix<-"))
 setReplaceMethod("length.matrix", "compData",
                  function(x, value) {stop("There is no 'lenght.matrix' slot in a 'compData' object. Please use a 'phyloCompData' object.")})
